@@ -1,0 +1,52 @@
+{% macro sidebar() %}
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <div class="col-auto">
+                 <!--<div class="bg-secondary rounded-3 ml-1 mt-1" style="height: 70pc "> -->
+                    
+
+
+                    <!--Main Navigation-->
+                    <header>
+                    <!-- Sidebar -->
+                    <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+                        <div class="position-sticky">
+                        <div class="list-group list-group-flush mx-3 mt-4 ">
+                            
+                            <a href="{{ url_for('usuarios') }}" class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fa fa-user-o fa-fw me-3"></i><span>Usuarios</span>
+                            </a>
+                            <a href="{{ url_for('pacientes') }}" class="list-group-item list-group-item-action py-2 ripple"
+                            ><i class="fa fa-drivers-license-o fa-fw me-3"></i><span>Pacientes</span>
+                            </a>
+                            <a href="{{ url_for('turnos') }}" class="list-group-item list-group-item-action py-2 ripple"
+                            ><i class="fa fa-calendar-o fa-fw me-3"></i><span>Turnos</span>
+                            </a>
+                            <a href="{{ url_for('sala') }}" class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fa fa-newspaper-o fa-fw me-3"></i><span>Sala de Espera</span>
+                            </a>
+                            <a href="{{ url_for('logout') }}" class="list-group-item list-group-item-action py-2 ripple"
+                            ><i class="fa fa-sign-out fa-fw me-3"></i><span>Cerrar Sesión</span>
+                            </a>
+                            
+                        </div>
+                        </div>
+                    </nav>
+                    <!-- Sidebar -->
+
+                    </header>
+                    <!--Main Navigation-->
+
+                    <!--Main layout-->
+                    <main style="margin-top: 58px;">
+                    <div class="container pt-4"></div>
+                    </main>
+                    <!--Main layout-->
+
+
+
+                 <!--</div> -->
+            </div>
+        </div>
+    </div>
+{% endmacro %}
