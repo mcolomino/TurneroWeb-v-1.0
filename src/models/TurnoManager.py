@@ -29,9 +29,9 @@ class TurnoManager():
     #BUSCAR TODOS SEGUN FILTRO (PROFESIONAL, PACIENTE, FECHA)
     def BuscarTodos(self,db, filtro):
         try:
-            
+            #DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha
             cursor=db.connection.cursor()
-            sql="""SELECT idturno, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha, horaturno, idprofesional, idpaciente, actividad, estado, 
+            sql="""SELECT idturno, fecha, horaturno, idprofesional, idpaciente, actividad, estado, 
                 horallega, horaatiende, p.nombre AS nombre_pac, u.nombre AS nombre_prof 
                 FROM turnos t INNER JOIN pacientes p ON t.idpaciente = p.idpac INNER JOIN usuario u ON t.idprofesional = u.idusu ORDER BY t.fecha, t.horaturno"""
             

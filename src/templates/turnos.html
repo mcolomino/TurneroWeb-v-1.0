@@ -3,6 +3,7 @@
 
 {% block page_content %}
 
+
 <div class="container rounded-4" gap-3 style="background-color: rgb(189, 189, 181, 0.432);">
   <!-- Buscar por usuario -->
   <div class="row mt-3 border border-3 rounded-4" style="background-color: rgb(248, 248, 233); ">
@@ -50,10 +51,14 @@
             <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
                         
             <!---Campo:Fecha   -->
-            <div class="form-group">
-              <label for="fecha">Fecha:</label>
-              <input type="date" format="dd/mm/yyyy" value="" class="form-control datepicker" id="fecha" name="fecha" placeholder="Ingrese Fecha..." required>
+              <div class="form-group">
+              <label for="reg_fecha">Fecha:</label>
+              <input type="date" class="form-control datepicker"  id="reg_fecha" name="reg_fecha" placeholder="Ingrese Fecha..." required>
             </div>
+            <!-- Script para obtener y mostrar la fecha actual -->
+                      
+          
+
             <!---Campo:Hora   --->
             <div class="form-group">
               <label for="hora">Hora:</label>
@@ -64,13 +69,13 @@
             <div class="form-group">
               <label for="reg_prof">Profesional</label>
               <div class="input-group">
-                <input list="reg_profesionales" class="form-control" id="reg_prof" name="reg_prof" placeholder="Seleccione Profesional...">
-                <datalist id="reg_profesionales">
-                  <!-- Opciones del combobox -->
+                <select name="reg_prof" type="selectpicker" data-live-search="true" id="reg_profesionales" class="form-control"
+                  title="Seleccionar Profesional">
+            
                   {% for itemx in ListaProf %}
-                    <option value="{{ itemx[0] }} {{ itemx[1] }}"></option>
+                  <option value="{{ itemx[0] }}">{{ itemx[1] }}</option>
                   {% endfor %}
-                </datalist>
+                </select>
               </div>
             </div>
             
@@ -78,20 +83,21 @@
             <div class="form-group">
               <label for="reg_pac">Paciente:</label>
               <div class="input-group">
-                <input list="reg_pacientes" class="form-control" id="reg_pac" name="reg_pac" placeholder="Seleccione Paciente...">
-                <datalist id="reg_pacientes">
-                  <!-- Opciones del datalist -->
+                <select name="reg_pac" type="selectpicker" data-live-search="true" id="reg_pacientes" class="form-control"
+                  title="Seleccionar Paciente">
+            
                   {% for itemx in ListaPac %}
-                    <option value="{{ itemx[0] }} {{ itemx[1] }}"></option>
+                  <option value="{{ itemx[0] }}">{{ itemx[1] }}</option>
                   {% endfor %}
-                </datalist>
-
+                </select>
+            
                 <div class="input-group-append">
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarPacienteModal">+</button>
                 </div>
               </div>
+          
             </div>
-
+            
             <!---Campo:actividad (Control - Consulta)   ---->
             <div class="form-group">
               <label for="registro_act">Actividad</label>
@@ -119,6 +125,12 @@
   
 </div>
 
+<script>
+  // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
+  var fechaActual = new Date().toISOString().split('T')[0];
+  // Establecer la fecha actual como valor del campo de fecha
+  document.getElementById('reg_fecha').value = fechaActual;
+</script>
 
 <!-- Cabecera lista de turnos -->
 <div class="row mt-2 border border-3 rounded-4" style="background-color: rgb(248, 248, 233);">
@@ -140,7 +152,9 @@
           <td>{{ itemx[9] }}</td>
           <td>{{ itemx[5] }}</td>
           <td>
-            <a href="EditarTurno/{{ itemx[0] }}" class="btn" data-bs-toggle="modal"
+            <!--<a href="EditarTurno/{{ itemx[0] }}" class="btn editar-btn" onclick="mostrarFecha()" data-bs-toggle="modal" data-fecha="{{ itemx[1] }}"
+              data-bs-target="#Editar_Tur{{ itemx[0] }}" type="button" >--->
+            <a href="EditarTurno/{{ itemx[0] }}" class="btn editar-btn" data-bs-toggle="modal" 
               data-bs-target="#Editar_Tur{{ itemx[0] }}" type="button" >
               <i class="fa fa-edit" aria-hidden="true"></i>
             </a>
@@ -153,7 +167,9 @@
 
 
         <!--- FORM MODAL PARA EDITAR TURNO --->
-        <div class="modal fade" id="Editar_Tur{{ itemx[0] }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+          <!-- Contenido del modal -->
+      
+        <div class="modal fade" id="Editar_Tur{{ itemx[0] }}" data-bs-backdrop="static" data-bs-keyboard="false"  tabindex="-1"
           aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -166,17 +182,20 @@
               <div class="modal-body">
                 <form id="Editar_Tur" method="POST" action="EditarTurno/{{ itemx[0] }}">
                   <input type="hidden" name="id" value="{{ itemx[0] }}">
+                  <input type="text" id="idPopi" name="idPopi" value="{{ itemx[1] }}">
                   <input type="hidden" name="csrf_token" value="{{ csrf_token()}}"> 
         
                   <!---Campo:Fecha   ---->
                   <div class="form-group">
-                    <label for="fecha">Fecha:</label>
-                    <input value= "{{ itemx[1] }}" type="date" class="form-control" id="fecha" name="fecha" placeholder="Ingrese Fecha..." required>
+                    <label for="edit_fecha">Fecha:</label>
+                    <input type="date" value="{{ itemx[1] }}" class="form-control" id="edit_fecha" name="edit_fecha" placeholder="Ingrese Fecha..." required>
+                  
                   </div>
+
                   <!---Campo:Hora   --->
                   <div class="form-group">
-                    <label for="hora">Hora:</label>
-                    <input value="{{ itemx[2] }}" type="time" class="form-control" id="hora" name="hora" placeholder="Ingrese Hora..." required>
+                    <label for="edit_hora">Hora:</label>
+                    <input value="{{ itemx[2] }}" type="time" class="form-control" id="edit_hora" name="edit_hora" placeholder="Ingrese Hora..." required>
                   </div>
                   <!---Campo:profesional   ---->
                   <div class="form-group">
@@ -185,14 +204,14 @@
                       
                       {% for itemh in ListaProf %}
                         {% if itemh[0] == itemx[3] %}
-                          <input list="Edit_profesionales" value="{{ itemh[0] }} {{ itemh[1] }}" class="form-control" id="edit_prof" name="edit_prof" placeholder="Seleccione Profesional...">
+                          <input list="Edit_profesionales" value="{{ itemh[0] }}{{ itemh[1] }}" class="form-control" id="edit_prof" name="edit_prof" placeholder="Seleccione Profesional...">
                           
                         {% endif %}
                       {% endfor %}
                       
                       <datalist id="Edit_profesionales">
                         {% for itemx in ListaProf %}
-                          <option value="{{ itemx[0] }} {{ itemx[1] }}"></option>
+                          <option value="{{ itemx[0] }}">{{ itemx[1] }}</option>
                         {% endfor %}
                       </datalist>
                     </div> 
@@ -269,10 +288,15 @@
         </div>
       
       {% endfor %}
+
+      
+
     </tbody>
 
   </table>
   {{ Pagination.links}}
+
+ 
 
 </div>
 

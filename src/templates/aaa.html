@@ -1,0 +1,29 @@
+<!-- Formulario modal -->
+<div class="modal fade" id="agregarTurnoModal" tabindex="-1" aria-labelledby="agregarTurnoModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agregarTurnoModalLabel">Agregar Turno</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="agregarTurnoForm">
+                    <div class="mb-3">
+                        <label for="fecha" class="form-label">Fecha:</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha">
+                    </div>
+                    <!-- Otros campos del formulario -->
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Función para limpiar el campo de fecha cada vez que se muestra el modal
+    $('#agregarTurnoModal').on('show.bs.modal', function () {
+        // Limpiar el valor del campo de fecha
+        $('#fecha').val('');
+    });
+</script>

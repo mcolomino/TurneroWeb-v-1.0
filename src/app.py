@@ -268,14 +268,17 @@ def turnos():
     #print (TodPac)
     return render_template('turnos.html',Lista = paginated_data, ListaProf = TodUsuProf, ListaPac = TodPac, Pagination=pagination)
 
+
 @app.route('/AltaTurno', methods=['POST'])
 @login_required
 def AltaTurno():
     if request.method=='POST':
-        #print(request.form.getlist('reg_prof'))
-        #print(request.form.getlist('reg_pac'))
+        #print(request.form['reg_fecha'])
+        #print(request.form['reg_prof'])
+        #print(request.form['reg_pac'])
         
-        Tur=TurnoVal(0,request.form['fecha'],request.form['hora'],request.form.getlist('reg_prof'), request.form.getlist('reg_pac'), request.form['actividad'], "En Agenda", "", "")
+        Tur=TurnoVal(0, request.form['reg_fecha'], request.form['hora'], request.form['reg_prof'], request.form['reg_pac'], request.form['actividad'], "En Agenda", "", "")
+        print (Tur)
         NewTur=TurnoManager.AgregarTur(db,Tur)
         
         return redirect(url_for("turnos"))
@@ -292,7 +295,7 @@ def EditarTurno(id):
        
         print(request.form.getlist('edit_prof'))
         print(request.form.getlist('edit_pac'))
-        Tur=TurnoVal(id,request.form['fecha'],request.form['hora'],request.form.getlist('edit_prof'), request.form.getlist('edit_pac'), request.form['actividad'], request.form['estado'], request.form['horallega'], request.form['horaatiende'])
+        Tur=TurnoVal(id,request.form['edit_fecha'],request.form['edit_hora'],request.form.getlist('edit_prof'), request.form.getlist('edit_pac'), request.form['actividad'], request.form['estado'], request.form['horallega'], request.form['horaatiende'])
         
         NewTur=TurnoManager.EditarTur(db,Tur)
         
