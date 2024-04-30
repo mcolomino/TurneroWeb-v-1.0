@@ -1,29 +1,81 @@
-<!-- Formulario modal -->
-<div class="modal fade" id="agregarTurnoModal" tabindex="-1" aria-labelledby="agregarTurnoModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="agregarTurnoModalLabel">Agregar Turno</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="agregarTurnoForm">
-                    <div class="mb-3">
-                        <label for="fecha" class="form-label">Fecha:</label>
-                        <input type="date" class="form-control" id="fecha" name="fecha">
-                    </div>
-                    <!-- Otros campos del formulario -->
-                    <button type="submit" class="btn btn-primary">Agregar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('../static/img/Consultorio-medico.jpg'); /* Cambia 'url_de_la_imagen.jpg' por la URL de tu imagen */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    
+</head>
+<body>
+<div class="container mt-5">
+    
 
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group"> <label>Minimal</label> <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                <option selected="selected">Alabama</option>
+                <option>Alaska</option>
+                <option>California</option>
+                <option>Delaware</option>
+                <option>Tennessee</option>
+                <option>Texas</option>
+                <option>Washington</option>
+            </select> </div> <!-- /.form-group -->
+        <div class="form-group"> <label>Disabled</label> <select class="form-control select2 select2-hidden-accessible" disabled="" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                <option selected="selected">Alabama</option>
+                <option>Alaska</option>
+                <option>California</option>
+                <option>Delaware</option>
+                <option>Tennessee</option>
+                <option>Texas</option>
+                <option>Washington</option>
+            </select> </div> <!-- /.form-group -->
+    </div> <!-- /.col -->
+    <div class="col-md-6">
+        <div class="form-group"> <label>Multiple</label> <select class="form-control select2 select2-hidden-accessible" multiple="" data-placeholder="Select a State" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                <option>Alabama</option>
+                <option>Alaska</option>
+                <option>California</option>
+                <option>Delaware</option>
+                <option>Tennessee</option>
+                <option>Texas</option>
+                <option>Washington</option>
+            </select> </div> <!-- /.form-group -->
+        <div class="form-group"> <label>Disabled Result</label> <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                <option selected="selected">Alabama</option>
+                <option>Alaska</option>
+                <option disabled="disabled">California (disabled)</option>
+                <option>Delaware</option>
+                <option>Tennessee</option>
+                <option>Texas</option>
+                <option>Washington</option>
+            </select> </div> <!-- /.form-group -->
+    </div> <!-- /.col -->
+</div>
 <script>
-    // Función para limpiar el campo de fecha cada vez que se muestra el modal
-    $('#agregarTurnoModal').on('show.bs.modal', function () {
-        // Limpiar el valor del campo de fecha
-        $('#fecha').val('');
-    });
+$(document).ready(function() {
+    $('.select2').select2({
+    closeOnSelect: false
+});
+});
 </script>
+</div>
+</body>
+</html>

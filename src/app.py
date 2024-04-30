@@ -311,7 +311,7 @@ def BorrarTurno(id):
     DelTur=TurnoManager.BorrarTur(db,id)
     if DelTur=='Borrado':
         return redirect(url_for("turnos"))
-        
+         
     else:
         return 'Please go back and enter your name...', 400  # 400 Bad Request
 

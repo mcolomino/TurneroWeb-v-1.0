@@ -2,7 +2,11 @@
 {% extends './basegral.html' %}
 
 {% block page_content %}
-
+<!--
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+-->
 
 <div class="container rounded-4" gap-3 style="background-color: rgb(189, 189, 181, 0.432);">
   <!-- Buscar por usuario -->
@@ -11,19 +15,18 @@
 
       <!---Campo:profesional   ---->
       <div class="form-group">
-        <!--<label for="profsel">Profesional</label> -->
+        <label for="professel">Profesional</label>
         <div class="input-group">
-          <input list="professel" class="form-control" id="profsel" name="profsel" placeholder="Seleccione Profesional...">
-          <datalist id="professel">
+          <select name="professel" type="selectpicker" data-live-search="true" id="professel"
+            class="form-control" title="Seleccionar Profesional">
+
             {% for itemx in ListaProf %}
-              <option value="{{ itemx[0] }} {{ itemx[1] }}"></option>
+            <option value="{{ itemx[0] }}">{{ itemx[1] }}</option>
             {% endfor %}
-          </datalist>
+          </select>
         </div>
       </div>
-
-
-
+      
     </div>
     <div class="col my-3">
       <button class="btn btn-primary ms-2" title="Buscar  por Profesional" type="submit">Buscar</button>
@@ -36,7 +39,7 @@
 
   <!--- FORM MODAL PARA AGREGAR TURNO    --->
   <div id="modal_add" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -49,60 +52,81 @@
         <div class="modal-body">
           <form id="modal_add" action="AltaTurno" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
-                        
+
             <!---Campo:Fecha   -->
-              <div class="form-group">
+            <div class="form-group">
               <label for="reg_fecha">Fecha:</label>
-              <input type="date" class="form-control datepicker"  id="reg_fecha" name="reg_fecha" placeholder="Ingrese Fecha..." required>
+              <input type="date" class="form-control datepicker" id="reg_fecha" name="reg_fecha"
+                placeholder="Ingrese Fecha..." required>
             </div>
             <!-- Script para obtener y mostrar la fecha actual -->
-                      
-          
+
+
 
             <!---Campo:Hora   --->
             <div class="form-group">
               <label for="hora">Hora:</label>
               <input type="time" class="form-control" id="hora" name="hora" placeholder="Ingrese Hora..." required>
-            </div> 
-            
+            </div>
+
             <!---Campo:profesional   ---->
             <div class="form-group">
               <label for="reg_prof">Profesional</label>
               <div class="input-group">
-                <select name="reg_prof" type="selectpicker" data-live-search="true" id="reg_profesionales" class="form-control"
-                  title="Seleccionar Profesional">
-            
+                <select name="reg_prof" type="selectpicker" data-live-search="true" id="reg_profesionales"
+                  class="form-control" title="Seleccionar Profesional">
+
                   {% for itemx in ListaProf %}
                   <option value="{{ itemx[0] }}">{{ itemx[1] }}</option>
                   {% endfor %}
                 </select>
               </div>
             </div>
-            
+
+
+            <div class="form-group">
+              <label for="eeuu">Minimal</label>
+              <select name="eeuu" class="form-control select2 select2-hidden-accessible" style="width: 100%;"
+                tabindex="-1" aria-hidden="true">
+                <option selected="selected">Alabama</option>
+                <option>Alaska</option>
+                <option>California</option>
+                <option>Delaware</option>
+                <option>Tennessee</option>
+                <option>Texas</option>
+                <option>Washington</option>
+              </select>
+            </div>
+
+
+
+
             <!---Campo:paciente   ---->
             <div class="form-group">
               <label for="reg_pac">Paciente:</label>
               <div class="input-group">
-                <select name="reg_pac" type="selectpicker" data-live-search="true" id="reg_pacientes" class="form-control"
-                  title="Seleccionar Paciente">
-            
+                <select name="reg_pac" type="selectpicker" data-live-search="true" id="reg_pacientes"
+                  class="form-control" title="Seleccionar Paciente">
+
                   {% for itemx in ListaPac %}
                   <option value="{{ itemx[0] }}">{{ itemx[1] }}</option>
                   {% endfor %}
                 </select>
-            
+
                 <div class="input-group-append">
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarPacienteModal">+</button>
+                  <button type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#agregarPacienteModal">+</button>
                 </div>
               </div>
-          
+
             </div>
-            
+
             <!---Campo:actividad (Control - Consulta)   ---->
             <div class="form-group">
               <label for="registro_act">Actividad</label>
               <div class="input-group">
-                <input list="actividades" class="form-control" id="registro_act" name="actividad" placeholder="Seleccione Actividad...">
+                <input list="actividades" class="form-control" id="registro_act" name="actividad"
+                  placeholder="Seleccione Actividad...">
                 <datalist id="actividades">
                   <!-- Opciones del datalist -->
                   <option value="Control">
@@ -110,11 +134,11 @@
                 </datalist>
               </div>
             </div>
-            
+
             <!---Campo:estado (por defecto va a ser "En Agenda")  ---->
             <!---Campo:Horallega  vacío ---->
             <!---Campo:Horatiende vacío ---->
-            
+
             <!---Botón:Registra--->
             <button type="submit" class="btn btn-primary md-2">Registrar</button>
           </form>
@@ -122,7 +146,8 @@
       </div>
     </div>
   </div>
-  
+
+
 </div>
 
 <script>
@@ -141,165 +166,178 @@
         <th scope="col">Hora</th>
         <th scope="col">Paciente</th>
         <th scope="col">Actividad</th>
-        
+
       </tr>
     </thead>
     <tbody>
       {% for itemx in Lista %}
-        <tr>
-          <td>{{ itemx[1] }}</td>
-          <td>{{ itemx[2] }}</td>
-          <td>{{ itemx[9] }}</td>
-          <td>{{ itemx[5] }}</td>
-          <td>
-            <!--<a href="EditarTurno/{{ itemx[0] }}" class="btn editar-btn" onclick="mostrarFecha()" data-bs-toggle="modal" data-fecha="{{ itemx[1] }}"
-              data-bs-target="#Editar_Tur{{ itemx[0] }}" type="button" >--->
-            <a href="EditarTurno/{{ itemx[0] }}" class="btn editar-btn" data-bs-toggle="modal" 
-              data-bs-target="#Editar_Tur{{ itemx[0] }}" type="button" >
-              <i class="fa fa-edit" aria-hidden="true"></i>
-            </a>
-            <a class="btn" href="BorrarTurno/{{ itemx[0] }}" onclick="return confirm('Seguro que desea eliminar el registro?')">
-              <i class="fa fa-trash-o" aria-hidden="true"></i>
-            </a>
-          </td>
-        </tr>
+      <tr>
+        <td>{{ itemx[1] }}</td>
+        <td>{{ itemx[2] }}</td>
+        <td>{{ itemx[9] }}</td>
+        <td>{{ itemx[5] }}</td>
+        <td>
+          <a href="EditarTurno/{{ itemx[0] }}" class="btn editar-btn" data-bs-toggle="modal"
+            data-bs-target="#Editar_Tur{{ itemx[0] }}" type="button">
+            <i class="fa fa-edit" aria-hidden="true"></i>
+          </a>
+          <a class="btn" href="BorrarTurno/{{ itemx[0] }}"
+            onclick="return confirm('Seguro que desea eliminar el registro?')">
+            <i class="fa fa-trash-o" aria-hidden="true"></i>
+          </a>
+        </td>
+      </tr>
 
 
 
-        <!--- FORM MODAL PARA EDITAR TURNO --->
-          <!-- Contenido del modal -->
-      
-        <div class="modal fade" id="Editar_Tur{{ itemx[0] }}" data-bs-backdrop="static" data-bs-keyboard="false"  tabindex="-1"
-          aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title text-primary text-center">Editar Datos del Turno </h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form id="Editar_Tur" method="POST" action="EditarTurno/{{ itemx[0] }}">
-                  <input type="hidden" name="id" value="{{ itemx[0] }}">
-                  <input type="text" id="idPopi" name="idPopi" value="{{ itemx[1] }}">
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token()}}"> 
-        
-                  <!---Campo:Fecha   ---->
-                  <div class="form-group">
-                    <label for="edit_fecha">Fecha:</label>
-                    <input type="date" value="{{ itemx[1] }}" class="form-control" id="edit_fecha" name="edit_fecha" placeholder="Ingrese Fecha..." required>
-                  
-                  </div>
+      <!--- FORM MODAL PARA EDITAR TURNO --->
+      <div class="modal fade" id="Editar_Tur{{ itemx[0] }}" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-primary text-center">Editar Datos del Turno </h5>
+              <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="Editar_Tur" method="POST" action="EditarTurno/{{ itemx[0] }}">
+                <input type="hidden" name="id" value="{{ itemx[0] }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
 
-                  <!---Campo:Hora   --->
-                  <div class="form-group">
-                    <label for="edit_hora">Hora:</label>
-                    <input value="{{ itemx[2] }}" type="time" class="form-control" id="edit_hora" name="edit_hora" placeholder="Ingrese Hora..." required>
-                  </div>
-                  <!---Campo:profesional   ---->
-                  <div class="form-group">
-                    <label for="edit_prof">Profesional</label>
-                    <div class="input-group">
-                      
+                <!---Campo:Fecha   ---->
+                <div class="form-group">
+                  <label for="edit_fecha">Fecha:</label>
+                  <input type="date" value="{{ itemx[1] }}" class="form-control" id="edit_fecha" name="edit_fecha"
+                    placeholder="Ingrese Fecha..." required>
+
+                </div>
+
+                <!---Campo:Hora   --->
+                <div class="form-group">
+                  <label for="edit_hora">Hora:</label>
+                  <input value="{{ itemx[2] }}" type="time" class="form-control" id="edit_hora" name="edit_hora"
+                    placeholder="Ingrese Hora..." required>
+                </div>
+
+
+
+                <!---Campo:profesional   ---->
+                <div class="form-group">
+                  <label for="edit_prof">Profesional</label>
+                  <div class="input-group">
+                    <select name="edit_prof" id="edit_prof" class="form-control selectpicker" data-live-search="true"
+                      title="Seleccionar Profesional">
+                      title="Seleccionar Profesional">
                       {% for itemh in ListaProf %}
-                        {% if itemh[0] == itemx[3] %}
-                          <input list="Edit_profesionales" value="{{ itemh[0] }}{{ itemh[1] }}" class="form-control" id="edit_prof" name="edit_prof" placeholder="Seleccione Profesional...">
-                          
-                        {% endif %}
+                      {% if itemh[0] == itemx[3] %}
+                      <option value="{{ itemh[0] }}" selected>{{ itemh[1] }}</option>
+                      {% else %}
+                      <option value="{{ itemh[0] }}">{{ itemh[1] }}</option>
+                      {% endif %}
                       {% endfor %}
-                      
-                      <datalist id="Edit_profesionales">
-                        {% for itemx in ListaProf %}
-                          <option value="{{ itemx[0] }}">{{ itemx[1] }}</option>
-                        {% endfor %}
-                      </datalist>
-                    </div> 
+
+                    </select>
                   </div>
-                  
-                  <!---Campo:Paciente   ---->
-                  <div class="form-group">
-                    <label for="edit_pac">Paciente:</label>
-                    <div class="input-group">
+                </div>
+
+                <!---Campo:paciente   ---->
+                <div class="form-group">
+                  <label for="edit_pac">Paciente:</label>
+                  <div class="input-group">
+                    <select name="edit_pac" type="selectpicker" data-live-search="true" id="edit_pac"
+                      class="form-control" title="Seleccionar Paciente">
+
                       {% for itemh in ListaPac %}
-                        {% if itemh[0] == itemx[4] %}
-                          <input list="Edit_pacientes" value="{{ itemh[0] }} {{ itemh[1] }}" class="form-control" id="edit_pac" name="edit_pac" placeholder="Seleccione Paciente...">
-                          
-                        {% endif %}
+                      {% if itemh[0] == itemx[4] %}
+                      <option value="{{ itemh[0] }}" selected>{{ itemh[1] }}</option>
+                      {% else %}
+                      <option value="{{ itemh[0] }}">{{ itemh[1] }}</option>
+                      {% endif %}
                       {% endfor %}
-                      
-                      <datalist id="Edit_pacientes">
-                        {% for itemx in ListaPac %}
-                          <option value="{{ itemx[0] }} {{ itemx[1] }}"></option>
-                        {% endfor %}
-                      </datalist>
-                      <div class="input-group-append">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarPacienteModal">+</button>
-                      </div>
-                    </div>
-                  </div>
-                  <!---Campo:Actividad   ---->
-                  <div class="form-group">
-                    <label for="actividad">Actividad</label>
-                    <div class="input-group">
-                      <input list="actividades" value="{{ itemx[5] }}" class="form-control" id="actividad" name="actividad" placeholder="Seleccione Actividad...">
-                      <datalist id="actividades">
-                        <!-- Opciones del combobox -->
-                        <option value="Control">
-                        <option value="Consulta">
-                      </datalist>
+                    </select>
+
+                    <div class="input-group-append">
+                      <button type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#agregarPacienteModal">+</button>
                     </div>
                   </div>
 
-                  <!---Campo:Estado   ---->
-                  <div class="form-group">
-                    <label for="estado">Estado</label>
-                    <div class="input-group">
-                      <input list="estados" value="{{ itemx[6] }}" class="form-control" id="estado" name="estado" placeholder="Seleccione Estado...">
-                      <datalist id="estados">
-                        <!-- Opciones del combobox -->
-                        <option value="En Agenda">
-                        <option value="En Espera">
-                        <option value="Atendido">
-                        <option value="Ausente">
-                        <option value="Cancelado">
-                        
-                      </datalist>
-                    </div>
-                  </div>
-                  
-                   <!---Campo:horallega   ---->
-                  <div class="form-group">
-                    <label for="horallega">Hora de Llegada al turno</label>
-                    <input value="{{ itemx[7] }}" name="horallega" type="time" class="form-control" id="horallega" placeholder="Ingrese Hora">
-                  </div>
-                   <!---Campo:horaatiende   ---->
-                   <div class="form-group">
-                    <label for="horaatiende">Hora Atendida</label>
-                    <input value="{{ itemx[8] }}" name="horaatiende" type="time" class="form-control" id="horaatiende" placeholder="Ingrese Hora">
-                  </div>
+                </div>
 
-                  <!---Botón:Registra--->
-                  <button type="submit" class="btn btn-primary md-2">Registrar</button>
-                </form>
-              </div>
-              
+
+                <!---Campo:Actividad   ---->
+                <div class="form-group">
+                  <label for="actividad">Actividad</label>
+                  <div class="input-group">
+                    <input list="actividades" value="{{ itemx[5] }}" class="form-control" id="actividad"
+                      name="actividad" placeholder="Seleccione Actividad...">
+                    <datalist id="actividades">
+                      <!-- Opciones del combobox -->
+                      <option value="Control">
+                      <option value="Consulta">
+                    </datalist>
+                  </div>
+                </div>
+
+                <!---Campo:Estado   ---->
+                <div class="form-group">
+                  <label for="estado">Estado</label>
+                  <div class="input-group">
+                    <input list="estados" value="{{ itemx[6] }}" class="form-control" id="estado" name="estado"
+                      placeholder="Seleccione Estado...">
+                    <datalist id="estados">
+                      <!-- Opciones del combobox -->
+                      <option value="En Agenda">
+                      <option value="En Espera">
+                      <option value="Atendido">
+                      <option value="Ausente">
+                      <option value="Cancelado">
+
+                    </datalist>
+                  </div>
+                </div>
+
+                <!---Campo:horallega   ---->
+                <div class="form-group">
+                  <label for="horallega">Hora de Llegada al turno</label>
+                  <input value="{{ itemx[7] }}" name="horallega" type="time" class="form-control" id="horallega"
+                    placeholder="Ingrese Hora">
+                </div>
+                <!---Campo:horaatiende   ---->
+                <div class="form-group">
+                  <label for="horaatiende">Hora Atendida</label>
+                  <input value="{{ itemx[8] }}" name="horaatiende" type="time" class="form-control" id="horaatiende"
+                    placeholder="Ingrese Hora">
+                </div>
+
+                <!---Botón:Registra--->
+                <button type="submit" class="btn btn-primary md-2">Registrar</button>
+              </form>
+            </div>
+
           </div>
         </div>
+      </div>
       
       {% endfor %}
-
-      
 
     </tbody>
 
   </table>
   {{ Pagination.links}}
-
- 
-
 </div>
 
 
+  <!--
+  <script>
+    $(document).ready(function() {
+        $('.select2').select2({
+        closeOnSelect: false
+    });
+    });
+  </script>
+-->
 
-{% endblock %}
+  {% endblock %}
