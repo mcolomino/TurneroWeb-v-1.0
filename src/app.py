@@ -42,6 +42,7 @@ def inicio():
     print (hora)
     '''
     return render_template('inicio.html')
+    #return render_template('aaa.html')
 
 
 @app.route('/logueo')
@@ -277,7 +278,7 @@ def AltaTurno():
         #print(request.form['reg_prof'])
         #print(request.form['reg_pac'])
         
-        Tur=TurnoVal(0, request.form['reg_fecha'], request.form['hora'], request.form['reg_prof'], request.form['reg_pac'], request.form['actividad'], "En Agenda", "", "")
+        Tur=TurnoVal(0, request.form['reg_fecha'], request.form['hora'], request.form['reg_prof'], request.form['reg_pac'], request.form['reg_act'], "En Agenda", "", "")
         print (Tur)
         NewTur=TurnoManager.AgregarTur(db,Tur)
         
@@ -295,7 +296,7 @@ def EditarTurno(id):
        
         print(request.form.getlist('edit_prof'))
         print(request.form.getlist('edit_pac'))
-        Tur=TurnoVal(id,request.form['edit_fecha'],request.form['edit_hora'],request.form.getlist('edit_prof'), request.form.getlist('edit_pac'), request.form['actividad'], request.form['estado'], request.form['horallega'], request.form['horaatiende'])
+        Tur=TurnoVal(id,request.form['edit_fecha'],request.form['edit_hora'],request.form.getlist('edit_prof'), request.form.getlist('edit_pac'), request.form['edit_act'], request.form['edit_estado'], request.form['edit_horallega'], request.form['edit_horaatiende'])
         
         NewTur=TurnoManager.EditarTur(db,Tur)
         
