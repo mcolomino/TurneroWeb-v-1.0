@@ -2,103 +2,84 @@ from .entities.Paciente import PacienteVal
 
 class PacienteManager():
     
-    
     @classmethod
-    def get_by_id(self,db, id):
+    def get_by_id(cls, db, id):
         try:
+            cursor = db.connection.cursor()
+            sql = "SELECT idpac, nombre, dni, telefono, mail FROM pacientes WHERE idpac = %s"
+            cursor.execute(sql, (id,))
+            row = cursor.fetchone()
             
-            cursor=db.connection.cursor()
-            sql="SELECT idpac, nombre, dni, telefono, mail FROM pacientes WHERE idpac = '{}'" .format(id) 
-            
-            cursor.execute(sql)
-            row=cursor.fetchone()
-            
-            if row != None:
-                PacVal=PacienteVal(row[0],row[1],row[2],row[3],row[4])
-                return PacVal
-            
-            else:
-                return None
+            return PacienteVal(*row) if row else None
 
         except Exception as ex:
-            raise Exception (ex)
-    
+            raise Exception(ex)
 
     @classmethod
-    def BuscarTodos(self,db, pac):
+    def BuscarTodos(cls, db, pac):
         try:
+            cursor = db.connection.cursor()
+            sql = "SELECT idpac, nombre, dni, telefono, mail FROM pacientes"
             
-            cursor=db.connection.cursor()
-            
-            
-            sql="SELECT idpac, nombre, dni, telefono, mail FROM pacientes"
+            conditions = []
+            params = []
 
             if pac.idpac is not None and int(pac.idpac) > 0:
-                sql += " WHERE idpac = '{}'" .format(pac.idpac)
-            
-             # order del sql
-            sql += " ORDER BY nombre"
+                conditions.append("idpac = %s")
+                params.append(pac.idpac)
 
-            cursor.execute(sql)
-            datos=cursor.fetchall()
+            if conditions:
+                sql += " WHERE " + " AND ".join(conditions)
+
+            sql += " ORDER BY nombre"
             
-            if datos != None:
-                return datos
+            cursor.execute(sql, params)
+            datos = cursor.fetchall()
             
-            else:
-                return None
+            return datos if datos else None
 
         except Exception as ex:
-            raise Exception (ex)
-    
+            raise Exception(ex)
 
     @classmethod
-    def AgregarPac(self,db, paciente):
+    def AgregarPac(cls, db, paciente):
         try:
-            
-            cursor=db.connection.cursor()
-            sql="INSERT INTO pacientes (nombre, dni, telefono, mail)  VALUES (%s,%s,%s,%s)" 
-            datos=(paciente.nombre, paciente.dni, paciente.telefono, paciente.mail)
-
+            cursor = db.connection.cursor()
+            sql = "INSERT INTO pacientes (nombre, dni, telefono, mail) VALUES (%s, %s, %s, %s)"
+            datos = (paciente.nombre, paciente.dni, paciente.telefono, paciente.mail)
+                   
             cursor.execute(sql, datos)
             db.connection.commit()
 
             return 'perfecto'
 
         except Exception as ex:
-            raise Exception (ex)
-   
+            raise Exception(ex)
 
     @classmethod
-    def EditarPac(self,db, paciente):
+    def EditarPac(cls, db, paciente):
         try:
+            cursor = db.connection.cursor()
+            sql = "UPDATE pacientes SET nombre = %s, dni = %s, telefono = %s, mail = %s WHERE idpac = %s"
+            datos = (paciente.nombre, paciente.dni, paciente.telefono, paciente.mail, paciente.idpac)
             
-            cursor=db.connection.cursor()
-            sql="UPDATE pacientes SET nombre=%s, dni=%s, telefono=%s, mail=%s WHERE idpac =%s"
-
-            datos=(paciente.nombre, paciente.dni, paciente.telefono, paciente.mail,paciente.idpac)
-            cursor.execute(sql,datos)
+            cursor.execute(sql, datos)
             db.connection.commit() 
             
             return 'Actualizado'
-            
-            
+
         except Exception as ex:
-            raise Exception (ex)
-        
-    
+            raise Exception(ex)
+
     @classmethod
-    def BorrarPac(self,db, id):
+    def BorrarPac(cls, db, id):
         try:
-            
-            cursor=db.connection.cursor()
-            sql="DELETE FROM pacientes WHERE idpac = '{}'" .format(id) 
-            
-            cursor.execute(sql)
+            cursor = db.connection.cursor()
+            sql = "DELETE FROM pacientes WHERE idpac = %s"
+            cursor.execute(sql, (id,))
             db.connection.commit()
 
             return "Borrado"
-            
 
         except Exception as ex:
-            raise Exception (ex)
+            raise Exception(ex)

@@ -3,140 +3,109 @@ from .entities.User import UsuarioVal
 class UsuarioManager():
 
     @classmethod
-    def login(self,db, usuario):
+    def login(cls, db, usuario):
         try:
+            cursor = db.connection.cursor()
+            sql = "SELECT idusu, nombre, mail, clave, telefono, profesional FROM usuario WHERE mail = %s"
+            cursor.execute(sql, (usuario.mail,))
+            row = cursor.fetchone()
             
-            cursor=db.connection.cursor()
-            sql="SELECT idusu, nombre, mail, clave, telefono, profesional FROM usuario WHERE mail = '{}'" .format(usuario.mail) 
-            
-            cursor.execute(sql)
-            row=cursor.fetchone()
-            
-            if row != None:
-                UsuVal=UsuarioVal(row[0],row[1],row[2],row[3],row[4],row[5])
-                return UsuVal
-            else:
-                return None
+            return UsuarioVal(*row) if row else None
 
         except Exception as ex:
-            raise Exception (ex)
-        
-    
+            raise Exception(ex)
+
     @classmethod
-    def get_by_id(self,db, id):
+    def get_by_id(cls, db, id):
         try:
+            cursor = db.connection.cursor()
+            sql = "SELECT idusu, nombre, mail, clave, telefono, profesional FROM usuario WHERE idusu = %s"
+            cursor.execute(sql, (id,))
+            row = cursor.fetchone()
             
-            cursor=db.connection.cursor()
-            sql="SELECT idusu, nombre, mail, clave, telefono, profesional FROM usuario WHERE idusu = '{}'" .format(id) 
-            
-            cursor.execute(sql)
-            row=cursor.fetchone()
-            
-            if row != None:
-                UsuVal=UsuarioVal(row[0],row[1],row[2],row[3],row[4],row[5])
-                return UsuVal
-            
-            else:
-                return None
+            return UsuarioVal(*row) if row else None
 
         except Exception as ex:
-            raise Exception (ex)
-    
+            raise Exception(ex)
 
     @classmethod
-    def BuscarTodos(self,db, usuario):
+    def BuscarTodos(cls, db, usuario):
         try:
+            cursor = db.connection.cursor()
+            sql = "SELECT idusu, nombre, mail, clave, telefono, profesional FROM usuario"
             
-            cursor=db.connection.cursor()
-            sql="SELECT idusu, nombre, mail, clave, telefono, profesional FROM usuario"
+            conditions = []
+            params = []
 
             if usuario.id is not None and int(usuario.id) > 0:
-                sql += " WHERE idusu = '{}'" .format(usuario.id)
-            
-             # order del sql
+                conditions.append("idusu = %s")
+                params.append(usuario.id)
+
+            if conditions:
+                sql += " WHERE " + " AND ".join(conditions)
+
             sql += " ORDER BY nombre"
-
-       
-            cursor.execute(sql)
-            datos=cursor.fetchall()
             
-            if datos != None:
-                return datos
+            cursor.execute(sql, params)
+            datos = cursor.fetchall()
             
-            else:
-                return None
+            return datos if datos else None
 
         except Exception as ex:
-            raise Exception (ex)
-    
+            raise Exception(ex)
 
     @classmethod
-    def BuscarTodosProf(self,db, usuario):
+    def BuscarTodosProf(cls, db, usuario):
         try:
-            
-            cursor=db.connection.cursor()
-            sql="SELECT idusu, nombre, mail, clave, telefono, profesional FROM usuario WHERE profesional = 'SI' ORDER BY nombre" 
-            
+            cursor = db.connection.cursor()
+            sql = "SELECT idusu, nombre, mail, clave, telefono, profesional FROM usuario WHERE profesional = 'SI' ORDER BY nombre"
             cursor.execute(sql)
-            datos=cursor.fetchall()
+            datos = cursor.fetchall()
             
-            if datos != None:
-                return datos
-            
-            else:
-                return None
+            return datos if datos else None
 
         except Exception as ex:
-            raise Exception (ex)
-        
+            raise Exception(ex)
 
     @classmethod
-    def AgregarUsu(self,db, usuario):
+    def AgregarUsu(cls, db, usuario):
         try:
-            
-            cursor=db.connection.cursor()
-            sql="INSERT INTO usuario (nombre, mail, clave, telefono, profesional)  VALUES (%s,%s,%s,%s,%s)" 
-            datos=(usuario.nombre, usuario.mail, usuario.clave,usuario.telefono,usuario.profesional)
+            cursor = db.connection.cursor()
+            sql = "INSERT INTO usuario (nombre, mail, clave, telefono, profesional) VALUES (%s, %s, %s, %s, %s)"
+            datos = (usuario.nombre, usuario.mail, usuario.clave, usuario.telefono, usuario.profesional)
                    
-            cursor.execute(sql,datos)
+            cursor.execute(sql, datos)
             db.connection.commit()
 
             return 'perfecto'
 
         except Exception as ex:
-            raise Exception (ex)
-   
+            raise Exception(ex)
 
     @classmethod
-    def EditarUsu(self,db, usuario):
+    def EditarUsu(cls, db, usuario):
         try:
+            cursor = db.connection.cursor()
+            sql = "UPDATE usuario SET nombre = %s, mail = %s, clave = %s, telefono = %s, profesional = %s WHERE idusu = %s"
+            datos = (usuario.nombre, usuario.mail, usuario.clave, usuario.telefono, usuario.profesional, usuario.id)
             
-            cursor=db.connection.cursor()
-            sql="UPDATE usuario SET nombre=%s, mail=%s, clave=%s, telefono=%s, profesional=%s WHERE idusu =%s"
-
-            datos=(usuario.nombre, usuario.mail, usuario.clave,usuario.telefono,usuario.profesional,usuario.id)
-            cursor.execute(sql,datos)
+            cursor.execute(sql, datos)
             db.connection.commit() 
             
             return 'Actualizado'
-            
-            
+
         except Exception as ex:
-            raise Exception (ex)
-        
-    
+            raise Exception(ex)
+
     @classmethod
-    def BorrarUsu(self,db, id):
+    def BorrarUsu(cls, db, id):
         try:
-            
-            cursor=db.connection.cursor()
-            sql="DELETE FROM usuario WHERE idusu = '{}'" .format(id) 
-            
-            cursor.execute(sql)
+            cursor = db.connection.cursor()
+            sql = "DELETE FROM usuario WHERE idusu = %s"
+            cursor.execute(sql, (id,))
             db.connection.commit()
 
             return "Borrado"
-            
 
         except Exception as ex:
-            raise Exception (ex)
+            raise Exception(ex)

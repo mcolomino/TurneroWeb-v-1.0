@@ -9,7 +9,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-image: url('../static/img/Consultorio-medico.jpg'); /* Cambia 'url_de_la_imagen.jpg' por la URL de tu imagen */
+            background-image: url('../static/img/Consultorio-medico.jpg'); /* Change 'url_of_the_image.jpg' to the URL of your image */
             background-size: cover;
             background-position: center;
             height: 100vh;
@@ -17,11 +17,14 @@
             justify-content: center;
             align-items: center;
         }
+        .btn-primary {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
     <form action="/logueo" method="get">
-        <button class="btn btn-primary w-100" type="submit">Iniciar Sesión</button>
+        <button class="btn btn-primary" type="submit">Iniciar Sesión</button>
     </form>
 </body>
 </html>
