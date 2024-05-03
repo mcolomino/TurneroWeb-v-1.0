@@ -87,3 +87,8 @@ a:hover {
     margin-bottom: 10px;
 }
 
+.btn-custom {
+    background-color: rgb(67, 67, 161);
+    border-color: rgb(67, 67, 161);
+    color: #fff; /* Cambia el color del texto si es necesario */
+  }

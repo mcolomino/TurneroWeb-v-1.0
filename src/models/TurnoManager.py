@@ -31,11 +31,28 @@ class TurnoManager():
         try:
             #DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha
             cursor=db.connection.cursor()
+            
+            # Iniciar la cadena SQL 
             sql="""SELECT idturno, fecha, horaturno, idprofesional, idpaciente, actividad, estado, 
                 horallega, horaatiende, p.nombre AS nombre_pac, u.nombre AS nombre_prof 
-                FROM turnos t INNER JOIN pacientes p ON t.idpaciente = p.idpac INNER JOIN usuario u ON t.idprofesional = u.idusu ORDER BY t.fecha, t.horaturno"""
+                FROM turnos t INNER JOIN pacientes p ON t.idpaciente = p.idpac INNER JOIN usuario u ON t.idprofesional = u.idusu"""
             
+            #armar WHERE segun filtro
+            # Iniciar la cadena WHERE con la condición FECHA DESDE-HASTA
+            if filtro.fechad is not None:
+                sql += " WHERE t.fecha BETWEEN '{}' AND '{}'".format(filtro.fechad, filtro.fechah)
 
+            # Si idprof no es None, agregar la condición de idprof
+            if filtro.idprofesional is not None and int(filtro.idprofesional) > 0:
+                sql += " AND t.idprofesional = '{}'" .format(filtro.idprofesional)
+
+            # Si idpaciente no es None, agregar la condición de idpaciente
+            if filtro.idpaciente is not None and int(filtro.idpaciente) > 0:
+                sql += " AND t.idpaciente = '{}'" .format(filtro.idpaciente)
+
+            # order del sql
+            sql += " ORDER BY t.fecha, t.horaturno"
+            
             cursor.execute(sql)
             datos=cursor.fetchall()
             

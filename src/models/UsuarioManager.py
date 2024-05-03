@@ -48,8 +48,15 @@ class UsuarioManager():
         try:
             
             cursor=db.connection.cursor()
-            sql="SELECT idusu, nombre, mail, clave, telefono, profesional FROM usuario ORDER BY nombre" 
+            sql="SELECT idusu, nombre, mail, clave, telefono, profesional FROM usuario"
+
+            if usuario.id is not None and int(usuario.id) > 0:
+                sql += " WHERE idusu = '{}'" .format(usuario.id)
             
+             # order del sql
+            sql += " ORDER BY nombre"
+
+       
             cursor.execute(sql)
             datos=cursor.fetchall()
             

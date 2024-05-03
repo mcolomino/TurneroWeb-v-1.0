@@ -25,12 +25,20 @@ class PacienteManager():
     
 
     @classmethod
-    def BuscarTodos(self,db, usuario):
+    def BuscarTodos(self,db, pac):
         try:
             
             cursor=db.connection.cursor()
-            sql="SELECT idpac, nombre, dni, telefono, mail FROM pacientes ORDER BY nombre" 
             
+            
+            sql="SELECT idpac, nombre, dni, telefono, mail FROM pacientes"
+
+            if pac.idpac is not None and int(pac.idpac) > 0:
+                sql += " WHERE idpac = '{}'" .format(pac.idpac)
+            
+             # order del sql
+            sql += " ORDER BY nombre"
+
             cursor.execute(sql)
             datos=cursor.fetchall()
             

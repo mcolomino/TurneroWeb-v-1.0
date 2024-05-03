@@ -12,4 +12,11 @@ class TurnoVal(UserMixin):
         self.horallega=horallega
         self.horaatiende=horaatiende
 
+
+class TurnoFil(UserMixin):
+    def __init__(self, fechad, fechah, idprofesional, idpaciente) -> None:
+        self.fechad=fechad
+        self.fechah=fechah
+        self.idprofesional=idprofesional
+        self.idpaciente=idpaciente
         

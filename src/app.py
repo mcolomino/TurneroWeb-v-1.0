@@ -15,6 +15,7 @@ from models.TurnoManager import TurnoManager
 from models.entities.User import UsuarioVal
 from models.entities.Paciente import PacienteVal
 from models.entities.Turno import TurnoVal
+from models.entities.Turno import TurnoFil
 
 app=Flask(__name__)
 
@@ -41,6 +42,9 @@ def inicio():
     hora=datetime.strftime(datetime.now(),'%H:%M')
     print (hora)
     '''
+    #fecha = datetime.now().strftime('%Y-%m-%d')
+    #print(fecha)
+    
     return render_template('inicio.html')
     #return render_template('aaa.html')
 
@@ -102,7 +106,7 @@ def principal():
 ### INICIO FUNCIONES PAGINA USUARIOS.HTML
 
 # FUNCION IR A PAGINA USUARIOS.HTML (la llamo desde el menú item Usuarios y carga la tabla con los usuarios de la BD)
-@app.route('/usuarios')
+@app.route('/usuarios', methods=['GET', 'POST'])
 @login_required
 def usuarios():
     paginated_data = []
@@ -110,7 +114,13 @@ def usuarios():
     pagination = None
     page, per_page, offset=get_page_args(page_parameter='page', per_page_parameter='per_page')
     
-    user=UsuarioVal(0,"","","",1,"")
+    idusu = 0
+    if request.method=='POST':
+        idusu = request.form['ususel']
+        user=UsuarioVal(idusu,"","","",1,"")
+    else:
+        user=UsuarioVal(0,"","","",1,"")
+
     TodUsu=UsuarioManager.BuscarTodos(db,user)
     
     total=len(TodUsu)   
@@ -179,7 +189,7 @@ def BorrarUsuario(id):
 ### INICIO FUNCIONES PAGINA PACIENTES.HTML
 
 
-@app.route('/pacientes')
+@app.route('/pacientes', methods=['GET', 'POST'])
 @login_required
 def pacientes():
     paginated_data = []
@@ -187,14 +197,24 @@ def pacientes():
     pagination = None
     page, per_page, offset=get_page_args(page_parameter='page', per_page_parameter='per_page')
     
-    Pac=PacienteVal(0,"","","","")
+    idpac = 0
+    if request.method=='POST':
+        idpac = request.form['pacsel']
+        Pac=PacienteVal(idpac,"","","","")
+    else:
+        Pac=PacienteVal(0,"","","","")
+    
     TodPac=PacienteManager.BuscarTodos(db,Pac)
     
     total=len(TodPac)   
     paginated_data=TodPac[offset: offset + per_page]
     pagination=Pagination(page=page, per_page=per_page,total=total, css_framework='bootstrap5')
 
-    return render_template('pacientes.html',Lista = paginated_data, Pagination=pagination)
+    #buscar todos los pacientes y pasarlos para llenar los combos 
+    Pac=PacienteVal(0,"","","","")
+    TodPac=PacienteManager.BuscarTodos(db,Pac)
+
+    return render_template('pacientes.html',Lista = paginated_data, TodPac = TodPac, idpac = idpac, Pagination=pagination)
 
 @app.route('/AltaPaciente', methods=['POST'])
 @login_required
@@ -244,7 +264,7 @@ def BorrarPaciente(id):
 ### INICIO FUNCIONES PAGINA TURNOS.HTML
 
 
-@app.route('/turnos')
+@app.route('/turnos', methods=['GET', 'POST'])
 @login_required
 def turnos():
     paginated_data = []
@@ -252,8 +272,23 @@ def turnos():
     pagination = None
     page, per_page, offset=get_page_args(page_parameter='page', per_page_parameter='per_page')
     
-    Tur=TurnoVal(0,"","","","","","","","")
-    TodTur=TurnoManager.BuscarTodos(db,Tur)
+    idprof=0
+    idpac=0
+    fechad = datetime.now().strftime('%Y-%m-%d')
+    fechah = datetime.now().strftime('%Y-%m-%d')
+    if request.method=='POST':
+        idprof = request.form['professel']
+        idpac = request.form['pacsel']
+        fechad = request.form['fechad']
+        fechah = request.form['fechah']
+        #crear un Turno filtro con prof, pac, fecdes, fechas
+        TurFil=TurnoFil(request.form['fechad'],request.form['fechah'],request.form['professel'],request.form['pacsel'])
+    else:
+        TurFil=TurnoFil(None,None,None,None)
+
+
+    #print (TurFil.idprofesional)
+    TodTur=TurnoManager.BuscarTodos(db,TurFil)
     total=len(TodTur)   
     paginated_data=TodTur[offset: offset + per_page]
     pagination=Pagination(page=page, per_page=per_page,total=total, css_framework='bootstrap5')
@@ -267,7 +302,8 @@ def turnos():
     TodPac=PacienteManager.BuscarTodos(db,Pac)
    
     #print (TodPac)
-    return render_template('turnos.html',Lista = paginated_data, ListaProf = TodUsuProf, ListaPac = TodPac, Pagination=pagination)
+    return render_template('turnos.html',Lista = paginated_data, ListaProf = TodUsuProf, ListaPac = TodPac, idprof = idprof, idpac = idpac, fechad = fechad, fechah = fechah, Pagination=pagination)
+    
 
 
 @app.route('/AltaTurno', methods=['POST'])
@@ -326,7 +362,7 @@ def BorrarTurno(id):
 ### INICIO FUNCIONES PAGINA TURNOS.HTML
 
 
-@app.route('/sala')
+@app.route('/sala', methods=['GET', 'POST'])
 @login_required
 def sala():
     paginated_data = []
@@ -334,23 +370,36 @@ def sala():
     pagination = None
     page, per_page, offset=get_page_args(page_parameter='page', per_page_parameter='per_page')
     
-    Tur=TurnoVal(0,"","","","","","","","")
-    TodTur=TurnoManager.BuscarTodos(db,Tur)
-    total=len(TodTur)   
-    paginated_data=TodTur[offset: offset + per_page]
-    pagination=Pagination(page=page, per_page=per_page,total=total, css_framework='bootstrap5')
-
     #buscar los usuarios profesionales y pasarlos para llenar los combos 
     user=UsuarioVal(0,"","","",1,"")
     TodUsuProf=UsuarioManager.BuscarTodosProf(db,user)
     
-    #buscar todos los pacientes y pasarlos para llenar los combos 
-    Pac=PacienteVal(0,"","","","")
-    TodPac=PacienteManager.BuscarTodos(db,Pac)
-   
+    idprof=0
+    for elemento in TodUsuProf:
+        idprof = elemento[0]
+        break
 
-    return render_template('sala.html',Lista = paginated_data, ListaProf = TodUsuProf, ListaPac = TodPac, Pagination=pagination)
 
+    #idpac=0
+    fechad = datetime.now().strftime('%Y-%m-%d')
+    fechah = datetime.now().strftime('%Y-%m-%d')
+    if request.method=='POST':
+        idprof = request.form['professel']
+        #idpac = request.form['pacsel']
+        fechad = request.form['fechad']
+        #fechah = request.form['fechah']
+        #crear un Turno filtro con prof, pac, fecdes, fechas
+        TurFil=TurnoFil(fechad,fechad,request.form['professel'],0)
+    else:
+        TurFil=TurnoFil(fechad,fechah,idprof,None)
+
+
+    TodTur=TurnoManager.BuscarTodos(db,TurFil)
+    total=len(TodTur)   
+    paginated_data=TodTur[offset: offset + per_page]
+    pagination=Pagination(page=page, per_page=per_page,total=total, css_framework='bootstrap5')
+    
+    return render_template('sala.html',Lista = paginated_data, ListaProf = TodUsuProf, idprof = idprof, fechad = fechad, Pagination=pagination)
 
 #actualiza estado de turnos
 
