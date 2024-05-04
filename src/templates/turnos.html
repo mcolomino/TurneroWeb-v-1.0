@@ -275,10 +275,15 @@
                 <div class="form-group">
                   <label for="edit_act">Actividad</label>
                   <div class="input-group">
-                    <select name="edit_act" type="selectpicker" data-live-search="true" id="edit_act"
+                    <select name="edit_act" type="selectpicker" data-live-search="true" id="edit_act" 
                       class="form-control" title="Seleccione Actividad...">
-                      <option>Control</option>
-                      <option>Consulta</option>
+                      {% for itemh in Lacti %}
+                      {% if itemh == itemx[5] %}
+                      <option value="{{ itemh }}" selected>{{ itemh }} </option>
+                      {% else %}
+                      <option value="{{ itemh }}">{{ itemh }} </option>
+                      {% endif %}
+                      {% endfor %}
                     </select>
                   </div>
                 </div>
@@ -287,13 +292,15 @@
                 <div class="form-group">
                   <label for="edit_estado">Estado</label>
                   <div class="input-group">
-                    <select name="edit_estado" type="selectpicker" data-live-search="true" id="edit_estado"
+                    <select name="edit_estado" type="selectpicker" data-live-search="true" id="edit_estado" 
                       class="form-control" title="Seleccione Estado...">
-                      <option>En Agenda</option>
-                      <option>En Espera</option>
-                      <option>Atendido</option>
-                      <option>Ausente</option>
-                      <option>Cancelado</option>
+                      {% for itemh in Lesta %}
+                      {% if itemh == itemx[6] %}
+                      <option value="{{ itemh }}" selected>{{ itemh }} </option>
+                      {% else %}
+                      <option value="{{ itemh }}">{{ itemh }} </option>
+                      {% endif %}
+                      {% endfor %}
 
                     </select>
                   </div>
@@ -348,6 +355,7 @@
     });
   });
 </script>
+
 
 
 {% endblock %}

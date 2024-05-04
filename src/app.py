@@ -97,7 +97,11 @@ def logout():
 @login_required
 def principal():
 
-    #actualizar estado "En Agenda" de turnos pasados ( menores a fecha actual) a "Ausente" 
+    #actualizar estado "En Agenda" de turnos pasados ( menores a fecha actual) a "Ausente"
+    fecha = datetime.now().strftime('%Y-%m-%d')
+    Tur=TurnoVal(0,fecha,"","", "", "", "", "", "")
+    
+    NewTur=TurnoManager.actausentes(db,Tur)    
 
     return render_template('principal.html')
 
@@ -276,6 +280,7 @@ def turnos():
     idpac=0
     fechad = datetime.now().strftime('%Y-%m-%d')
     fechah = datetime.now().strftime('%Y-%m-%d')
+    
     if request.method=='POST':
         idprof = request.form['professel']
         idpac = request.form['pacsel']
@@ -285,7 +290,6 @@ def turnos():
         TurFil=TurnoFil(request.form['fechad'],request.form['fechah'],request.form['professel'],request.form['pacsel'])
     else:
         TurFil=TurnoFil(None,None,None,None)
-
 
     #print (TurFil.idprofesional)
     TodTur=TurnoManager.BuscarTodos(db,TurFil)
@@ -300,9 +304,14 @@ def turnos():
     #buscar todos los pacientes y pasarlos para llenar los combos 
     Pac=PacienteVal(0,"","","","")
     TodPac=PacienteManager.BuscarTodos(db,Pac)
-   
+
+    #crear lista de estados
+    Estados = ["En Agenda", "En Espera", "Atendido", "Ausente", "Cancelado"]
+    #crear lista de actividades
+    Actividades = ["Consulta", "Control"]
+
     #print (TodPac)
-    return render_template('turnos.html',Lista = paginated_data, ListaProf = TodUsuProf, ListaPac = TodPac, idprof = idprof, idpac = idpac, fechad = fechad, fechah = fechah, Pagination=pagination)
+    return render_template('turnos.html',Lista = paginated_data, Lacti = Actividades, Lesta = Estados, ListaProf = TodUsuProf, ListaPac = TodPac, idprof = idprof, idpac = idpac, fechad = fechad, fechah = fechah, Pagination=pagination)
     
 
 

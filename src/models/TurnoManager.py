@@ -1,4 +1,5 @@
 from .entities.Turno import TurnoVal
+from datetime import datetime
 
 class TurnoManager():
     
@@ -101,6 +102,34 @@ class TurnoManager():
                 datos = (turno.estado, turno.horaatiende, turno.idturno)
 
             cursor.execute(sql, datos)
+            db.connection.commit()
+
+            return 'Actualizado'
+
+        except Exception as ex:
+            raise Exception(ex)
+        
+    @classmethod
+    def actausentes(cls, db, turno):
+        try:
+            cursor = db.connection.cursor()
+            
+            sql = "UPDATE turnos SET estado = 'Ausente'"
+
+            conditions = []
+            params = []
+
+            conditions.append("estado = %s")
+            params.append("En Agenda")
+
+            if turno.fecha is not None:
+                conditions.append("fecha < %s")
+                params.extend([turno.fecha])
+
+            if conditions:
+                sql += " WHERE " + " AND ".join(conditions)
+
+            cursor.execute(sql, params)
             db.connection.commit()
 
             return 'Actualizado'
