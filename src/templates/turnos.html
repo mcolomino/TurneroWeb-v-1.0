@@ -37,18 +37,18 @@
           <select name="pacsel" class="form-control select2 select2-hidden-accessible mx-3 me-3" style="width: 30%;" tabindex="-1"
             aria-hidden="true" title="Seleccionar Paciente">
             <option value="0">Todos</option>
-            {% for itemx in ListaPac %}
-            {% if itemx[0] == idpac|int %}
-            <option value="{{ itemx[0] }}" selected>{{ itemx[1] }} - {{ itemx[2] }} </option>
+            {% for PacV in ListaPac %}
+            {% if PacV.idpac == idpac|int %}
+            <option value="{{ PacV.idpac }}" selected>{{ PacV.nombre }} - {{ PacV.dni }} </option>
             {% else %}
-            <option value="{{ itemx[0] }}">{{ itemx[1] }} - {{ itemx[2] }} </option>
+            <option value="{{ PacV.idpac }}">{{ PacV.nombre }} - {{ PacV.dni }} </option>
             {% endif %}
             {% endfor %}
           </select>
           <!---Campo:Fecha Hasta -->
           <label for="fechah" class="me-3 mx-3">Fecha Hasta:</label>
           <input type="date" class="form-control-sm" id="fechah" name="fechah" value="{{fechah}}">
-          <button type="button" class="btn btn-primary ms-4 mx-3" data-bs-toggle="modal" data-bs-target="#modal_add"
+          <button type="button" class="btn btn-primary ms-4 mx-3" data-bs-toggle="modal" data-bs-target="#modal_add_turno"
             title="Crear Nuevo Registro"> Agregar Turno </button>
         </div>
       </div>
@@ -58,7 +58,7 @@
   </div>
 
   <!--- FORM MODAL PARA AGREGAR TURNO    --->
-  <div id="modal_add" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  <div id="modal_add_turno" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -70,7 +70,7 @@
         </div>
 
         <div class="modal-body">
-          <form id="modal_add" action="AltaTurno" method="POST">
+          <form id="form_add_turno" action="AltaTurno" method="POST">
 
             <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
 
@@ -93,7 +93,6 @@
               <div class="input-group">
                 <select name="reg_prof" class="form-control select2 select2-hidden-accessible" style="width: 100%;"
                   tabindex="-1" aria-hidden="true" title="Seleccionar Profesional">
-
                   {% for itemx in ListaProf %}
                   <option value="{{ itemx[0] }}">{{ itemx[1] }}</option>
                   {% endfor %}
@@ -106,10 +105,9 @@
               <label for="reg_pac">Paciente:</label>
               <div class="input-group">
                 <select name="reg_pac" class="form-control select2 select2-hidden-accessible" tabindex="-1"
-                  aria-hidden="true" title="Seleccionar Paciente">
-
-                  {% for itemx in ListaPac %}
-                  <option value="{{ itemx[0] }}">{{ itemx[1] }} - {{ itemx[2] }} </option>
+                  aria-hidden="true" title="Seleccionar Paciente" style="z-index: 9999;">
+                  {% for PacV in ListaPac %}
+                  <option value="{{ PacV.idpac }}">{{ PacV.nombre }} - {{ PacV.dni }} </option>
                   {% endfor %}
                 </select>
 
@@ -139,25 +137,11 @@
 
             <!---Botón:Registra--->
             <button type="submit" class="btn btn-primary md-2">Registrar</button>
-
-
-
-            <script>
-              $('#modal_add').on('shown.bs.modal', function () {
-                $('.select2').select2({
-                  closeOnSelect: true
-                });
-              });
-            </script>
-
-
           </form>
         </div>
       </div>
     </div>
   </div>
-
-
 </div>
 
 
@@ -252,12 +236,11 @@
                   <div class="input-group">
                     <select name="edit_pac" class="form-control select2 select2-hidden-accessible" tabindex="-1"
                       aria-hidden="true" title="Seleccionar Paciente">
-
-                      {% for itemh in ListaPac %}
-                      {% if itemh[0] == itemx[4] %}
-                      <option value="{{ itemh[0] }}" selected>{{ itemh[1] }} - {{ itemh[2] }} </option>
+                      {% for PacV in ListaPac %}
+                      {% if PacV.idpac == itemx[4] %}
+                      <option value="{{ PacV.idpac }}" selected>{{ PacV.nombre }} - {{ PacV.dni }} </option>
                       {% else %}
-                      <option value="{{ itemh[0] }}">{{ itemh[1] }} - {{ itemh[2] }} </option>
+                      <option value="{{ PacV.idpac }}">{{ PacV.nombre }} - {{ PacV.dni }} </option>
                       {% endif %}
                       {% endfor %}
                     </select>
@@ -356,6 +339,14 @@
   });
 </script>
 
-
+<!--
+<script>
+  $('#modal_add_turno').on('shown.bs.modal', function () {
+    $('.select2').select2({
+      closeOnSelect: true
+    });
+  });
+</script>
+-->
 
 {% endblock %}

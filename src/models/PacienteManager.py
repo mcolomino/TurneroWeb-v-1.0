@@ -35,8 +35,26 @@ class PacienteManager():
             
             cursor.execute(sql, params)
             datos = cursor.fetchall()
+
+            # Lista para almacenar las instancias de PacienteVal
+            lista_pac = []
+
+            # Itera sobre los resultados de la consulta SQL
+            for res in datos:
+                # Crea una instancia de PacienteVal para cada registro
+                PacV = PacienteVal(
+                    idpac=res[0],
+                    nombre=res[1],
+                    dni=res[2],
+                    telefono=res[3],
+                    mail=res[4]
+                )
+                # Agrega la instancia a la lista de pacientes
+                lista_pac.append(PacV)
+
+            # Ahora `lista_pac` contiene instancias de PacienteVal que representan los registros de la consulta SQL
             
-            return datos if datos else None
+            return lista_pac if lista_pac else None
 
         except Exception as ex:
             raise Exception(ex)

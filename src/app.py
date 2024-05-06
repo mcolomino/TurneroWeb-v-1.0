@@ -153,7 +153,7 @@ def AltaUsuario():
 @app.route('/EditarUsuario/<id>', methods=['POST'])
 @login_required
 def EditarUsuario(id):
-    print(id)
+
     if request.method=='POST':
        
         if request.form.get('chkprof')=='SI':

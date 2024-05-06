@@ -12,8 +12,8 @@
           <label for="pacsel" class="me-3">Paciente:</label>
           <select name="pacsel" class="form-control select2 select2-hidden-accessible" style="width: 30%;" tabindex="-1" aria-hidden="true" title="Seleccionar Paciente">
             <option value="0">Todos</option>
-            {% for itemx in TodPac %}
-              <option value="{{ itemx[0] }}">{{ itemx[1] }} - {{ itemx[2] }}</option>
+            {% for PacV in TodPac %}
+              <option value="{{ PacV.idpac }}">{{ PacV.nombre }} - {{ PacV.dni }}</option>
             {% endfor %}
           </select>
           <button class="btn btn-primary ms-2 mr-3" title="Buscar Paciente" type="submit" id="buscarBtn">Buscar</button>
@@ -72,23 +72,23 @@
       </tr>
     </thead>
     <tbody>
-      {% for itemx in Lista %}
+      {% for PacV in Lista %}
         <tr>
-          <td>{{ itemx[1] }}</td>
-          <td>{{ itemx[2] }}</td>
-          <td>{{ itemx[3] }}</td>
-          <td>{{ itemx[4] }}</td>
+          <td>{{ PacV.nombre }}</td>
+          <td>{{ PacV.dni }}</td>
+          <td>{{ PacV.telefono }}</td>
+          <td>{{ PacV.mail }}</td>
           <td>
-            <a href="EditarPaciente/{{ itemx[0] }}" class="btn" data-bs-toggle="modal" data-bs-target="#Editar_Pac{{ itemx[0] }}" type="button">
+            <a href="EditarPaciente/{{ PacV.idpac }}" class="btn" data-bs-toggle="modal" data-bs-target="#Editar_Pac{{ PacV.idpac }}" type="button">
               <i class="fa fa-edit" aria-hidden="true"></i>
             </a>
-            <a class="btn" href="BorrarPaciente/{{ itemx[0] }}" onclick="return confirm('Seguro que desea eliminar el registro?')">
+            <a class="btn" href="BorrarPaciente/{{ PacV.idpac }}" onclick="return confirm('Seguro que desea eliminar el registro?')">
               <i class="fa fa-trash-o" aria-hidden="true"></i>
             </a>
           </td>
         </tr>
         <!-- FORM MODAL PARA EDITAR PACIENTE -->
-        <div class="modal fade" id="Editar_Pac{{ itemx[0] }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="Editar_Pac{{ PacV.idpac }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -98,24 +98,24 @@
                 </button>
               </div>
               <div class="modal-body">
-                <form id="Editar_Pac" action="EditarPaciente/{{ itemx[0] }}" method="POST">
-                  <input type="hidden" name="id" value="{{ itemx[0] }}">
+                <form id="Editar_Pac" action="EditarPaciente/{{ PacV.idpac }}" method="POST">
+                  <input type="hidden" name="id" value="{{ PacV.idpac }}">
                   <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
                   <div class="form-group">
                     <label for="registro_nombre">Nombre</label>
-                    <input value="{{ itemx[1] }}" name="nombre" type="text" class="form-control" id="registro_nombre" placeholder="Ingrese Nombre" required>
+                    <input value="{{ PacV.nombre }}" name="nombre" type="text" class="form-control" id="registro_nombre" placeholder="Ingrese Nombre" required>
                   </div>
                   <div class="form-group">
                     <label for="registro_dni">DNI</label>
-                    <input value="{{ itemx[2] }}" name="dni" type="text" class="form-control" id="registro_dni" placeholder="Ingrese DNI" required>
+                    <input value="{{ PacV.dni }}" name="dni" type="text" class="form-control" id="registro_dni" placeholder="Ingrese DNI" required>
                   </div>
                   <div class="form-group">
                     <label for="registro_telefono">Teléfono</label>
-                    <input value="{{ itemx[3] }}" name="telefono" type="text" class="form-control" id="registro_telefono" placeholder="Ingrese telefono">
+                    <input value="{{ PacV.telefono }}" name="telefono" type="text" class="form-control" id="registro_telefono" placeholder="Ingrese telefono">
                   </div>
                   <div class="form-group">
                     <label for="registro_mail">Mail</label>
-                    <input value="{{ itemx[4] }}" name="mail" type="email" class="form-control" id="registro_mail" placeholder="Ingrese Mail">
+                    <input value="{{ PacV.mail }}" name="mail" type="email" class="form-control" id="registro_mail" placeholder="Ingrese Mail">
                   </div>
                   <button type="submit" class="btn btn-primary md-2">Registrar</button>
                 </form>
