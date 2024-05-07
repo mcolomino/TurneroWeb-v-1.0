@@ -99,7 +99,7 @@ def principal():
 
     #actualizar estado "En Agenda" de turnos pasados ( menores a fecha actual) a "Ausente"
     fecha = datetime.now().strftime('%Y-%m-%d')
-    Tur=TurnoVal(0,fecha,"","", "", "", "", "", "")
+    Tur=TurnoVal(0,fecha,"","", "", "", "", "", "", "", "")
     
     NewTur=TurnoManager.actausentes(db,Tur)    
 

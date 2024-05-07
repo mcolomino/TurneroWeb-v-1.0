@@ -10,15 +10,15 @@
       <div class="col my-3">
         <div class="input-group">
           <label for="ususel" class="me-3">Usuario:</label>
-          <select name="ususel" class="form-control select2 select2-hidden-accessible" style="width: 30%;" tabindex="-1" aria-hidden="true" title="Seleccionar Usuario">
+          <select name="ususel" class="form-control select2 select2-hidden-accessible me-3" style="width: 30%;" tabindex="-1" aria-hidden="true" title="Seleccionar Usuario">
             <option value="0">Todos</option>
             {% for UsuV in Lista %}
               <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
             {% endfor %}
           </select>
         
-          <button class="btn btn-primary ms-2 mr-3" title="Buscar Paciente" type="submit" id="buscarBtn">Buscar</button>
-          <button type="button" class="btn btn-primary ml-3" data-bs-toggle="modal" data-bs-target="#modal_add" title="Crear Nuevo Registro">Agregar Usuario</button>
+          <button class="btn btn-primary ms-2 me-3" title="Buscar Paciente" type="submit" id="buscarBtn">Buscar</button>
+          <button type="button" class="btn btn-primary ms-auto" data-bs-toggle="modal" data-bs-target="#modal_add" title="Crear Nuevo Registro">Agregar Usuario</button>
         </div>
       </div>
     </form>
