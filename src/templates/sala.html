@@ -17,11 +17,11 @@
             tabindex="-1" aria-hidden="true">
             <option value="0">Todos</option>
 
-            {% for itemx in ListaProf %}
-            {% if itemx[0] == idprof|int %}
-            <option value="{{ itemx[0] }}" selected>{{ itemx[1] }}</option>
+            {% for UsuV in ListaProf %}
+            {% if UsuV.id == idprof|int %}
+            <option value="{{ UsuV.id }}" selected>{{ UsuV.nombre }}</option>
             {% else %}
-            <option value="{{ itemx[0] }}">{{ itemx[1] }}</option>
+            <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
             {% endif %}
             {% endfor %}
 
@@ -52,43 +52,43 @@
       </tr>
     </thead>
     <tbody>
-      {% for itemx in Lista %}
+      {% for TurV in Lista %}
         <tr>
-          <td>{{ itemx[9] }}</td>
-          <td>{{ itemx[5] }}</td>
-          <td>{{ itemx[2] }}</td>
+          <td>{{ TurV.nompac }}</td>
+          <td>{{ TurV.actividad }}</td>
+          <td>{{ TurV.horaturno }}</td>
           <td>
             <div class="dropdown">
-              <button class="btn dropdown-toggle" value=" {{ itemx[6] }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ itemx[6]}}
+              <button class="btn dropdown-toggle" value=" {{ TurV.estado }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ TurV.estado }}
               </button>
               <ul class="dropdown-menu">
                 <li>
-                  <form action="/enagenda/{{ itemx[0] }}" method="POST">
+                  <form action="/enagenda/{{ TurV.idturno }}" method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
                     <button name="Est" class="dropdown-item" value="En Agenda" type="submit">En Agenda</button>
                   </form>
                 </li>
                 <li>
-                  <form action="/enespera/{{ itemx[0] }}" method="POST">
+                  <form action="/enespera/{{ TurV.idturno }}" method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
                     <button name="Est" class="dropdown-item" value="En Espera" type="submit">En Espera</button>
                   </form>
                 </li>
                 <li>
-                  <form action="/atendido/{{ itemx[0] }}" method="POST">
+                  <form action="/atendido/{{ TurV.idturno }}" method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
                     <button name="Est" class="dropdown-item" value="Atendido" type="submit">Atendido</button>
                   </form>
                 </li>
                 <li>
-                  <form action="/ausente/{{ itemx[0] }}" method="POST">
+                  <form action="/ausente/{{ TurV.idturno }}" method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
                     <button name="Est" class="dropdown-item" value="Ausente" type="submit">Ausente</button>
                   </form>
                 </li>
                 <li>
-                  <form action="/cancelado/{{ itemx[0] }}" method="POST">
+                  <form action="/cancelado/{{ TurV.idturno }}" method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
                     <button name="Est" class="dropdown-item" value="Cancelado" type="submit">Cancelado</button>
                   </form>

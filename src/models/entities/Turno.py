@@ -1,7 +1,7 @@
 from flask_login import UserMixin
 
 class TurnoVal(UserMixin):
-    def __init__(self, idturno, fecha, horaturno, idprofesional, idpaciente,actividad, estado,horallega,horaatiende) -> None:
+    def __init__(self, idturno, fecha, horaturno, idprofesional, idpaciente,actividad, estado,horallega,horaatiende, nomprof, nompac) -> None:
         self.idturno=idturno
         self.fecha=fecha
         self.horaturno=horaturno
@@ -11,6 +11,8 @@ class TurnoVal(UserMixin):
         self.estado=estado
         self.horallega=horallega
         self.horaatiende=horaatiende
+        self.nomprof=nomprof
+        self.nompac=nompac
 
 
 class TurnoFil(UserMixin):

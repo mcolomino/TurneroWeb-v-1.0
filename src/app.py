@@ -127,12 +127,18 @@ def usuarios():
 
     TodUsu=UsuarioManager.BuscarTodos(db,user)
     
-    total=len(TodUsu)   
-    paginated_data=TodUsu[offset: offset + per_page]
+    if TodUsu is not None:
+        total = len(TodUsu)
+        paginated_data=TodUsu[offset: offset + per_page]
+    else:
+        total = 0
+        paginated_data = []
+
     pagination=Pagination(page=page, per_page=per_page,total=total, css_framework='bootstrap5')
 
     return render_template('usuarios.html',Lista = paginated_data, Pagination=pagination)
-
+    
+    
 @app.route('/AltaUsuario', methods=['POST'])
 @login_required
 def AltaUsuario():
@@ -210,8 +216,13 @@ def pacientes():
     
     TodPac=PacienteManager.BuscarTodos(db,Pac)
     
-    total=len(TodPac)   
-    paginated_data=TodPac[offset: offset + per_page]
+    if TodPac is not None:
+        total = len(TodPac)
+        paginated_data=TodPac[offset: offset + per_page]
+    else:
+        total = 0
+        paginated_data = []
+
     pagination=Pagination(page=page, per_page=per_page,total=total, css_framework='bootstrap5')
 
     #buscar todos los pacientes y pasarlos para llenar los combos 
@@ -292,9 +303,17 @@ def turnos():
         TurFil=TurnoFil(None,None,None,None)
 
     #print (TurFil.idprofesional)
+
+
     TodTur=TurnoManager.BuscarTodos(db,TurFil)
-    total=len(TodTur)   
-    paginated_data=TodTur[offset: offset + per_page]
+    
+    if TodTur is not None:
+        total = len(TodTur)
+        paginated_data=TodTur[offset: offset + per_page]
+    else:
+        total = 0
+        paginated_data = []
+    
     pagination=Pagination(page=page, per_page=per_page,total=total, css_framework='bootstrap5')
 
     #buscar los usuarios profesionales y pasarlos para llenar los combos 
@@ -323,8 +342,8 @@ def AltaTurno():
         #print(request.form['reg_prof'])
         #print(request.form['reg_pac'])
         
-        Tur=TurnoVal(0, request.form['reg_fecha'], request.form['hora'], request.form['reg_prof'], request.form['reg_pac'], request.form['reg_act'], "En Agenda", "", "")
-        print (Tur)
+        Tur=TurnoVal(0, request.form['reg_fecha'], request.form['hora'], request.form['reg_prof'], request.form['reg_pac'], request.form['reg_act'], "En Agenda", "", "", "", "")
+        #print (Tur)
         NewTur=TurnoManager.AgregarTur(db,Tur)
         
         return redirect(url_for("turnos"))
@@ -339,9 +358,9 @@ def EditarTurno(id):
        
     if request.method=='POST':
        
-        print(request.form.getlist('edit_prof'))
-        print(request.form.getlist('edit_pac'))
-        Tur=TurnoVal(id,request.form['edit_fecha'],request.form['edit_hora'],request.form.getlist('edit_prof'), request.form.getlist('edit_pac'), request.form['edit_act'], request.form['edit_estado'], request.form['edit_horallega'], request.form['edit_horaatiende'])
+        #print(request.form.getlist('edit_prof'))
+        #print(request.form.getlist('edit_pac'))
+        Tur=TurnoVal(id,request.form['edit_fecha'],request.form['edit_hora'],request.form.getlist('edit_prof'), request.form.getlist('edit_pac'), request.form['edit_act'], request.form['edit_estado'], request.form['edit_horallega'], request.form['edit_horaatiende'], "", "")
         
         NewTur=TurnoManager.EditarTur(db,Tur)
         
@@ -385,9 +404,8 @@ def sala():
     
     idprof=0
     for elemento in TodUsuProf:
-        idprof = elemento[0]
+        idprof = elemento.id
         break
-
 
     #idpac=0
     fechad = datetime.now().strftime('%Y-%m-%d')
@@ -401,11 +419,18 @@ def sala():
         TurFil=TurnoFil(fechad,fechad,request.form['professel'],0)
     else:
         TurFil=TurnoFil(fechad,fechah,idprof,None)
+        #TurFil=TurnoFil(None,None,idprof,None)
 
 
     TodTur=TurnoManager.BuscarTodos(db,TurFil)
-    total=len(TodTur)   
-    paginated_data=TodTur[offset: offset + per_page]
+    if TodTur is not None:
+        total = len(TodTur)
+        paginated_data=TodTur[offset: offset + per_page]
+    else:
+        total = 0
+        paginated_data = []
+    
+
     pagination=Pagination(page=page, per_page=per_page,total=total, css_framework='bootstrap5')
     
     return render_template('sala.html',Lista = paginated_data, ListaProf = TodUsuProf, idprof = idprof, fechad = fechad, Pagination=pagination)
@@ -418,7 +443,7 @@ def enagenda(id):
     
     if request.method=='POST':
        
-        Tur=TurnoVal(id,"","","", "", "", "En Agenda", "", "")
+        Tur=TurnoVal(id,"","","", "", "", "En Agenda", "", "", "", "")
        
         NewTur=TurnoManager.actestado(db,Tur)
         
@@ -433,7 +458,7 @@ def enespera(id):
     if request.method=='POST':
         horallega=hora=datetime.strftime(datetime.now(),'%H:%M')
     
-        Tur=TurnoVal(id,"","","", "", "", "En Espera", horallega, "")
+        Tur=TurnoVal(id,"","","", "", "", "En Espera", horallega, "", "", "")
        
         NewTur=TurnoManager.actestado(db,Tur)
         
@@ -449,7 +474,7 @@ def atendido(id):
         
         horaatiende=hora=datetime.strftime(datetime.now(),'%H:%M')
 
-        Tur=TurnoVal(id,"","","", "", "", "Atendido", "", horaatiende)
+        Tur=TurnoVal(id,"","","", "", "", "Atendido", "", horaatiende, "", "")
        
         NewTur=TurnoManager.actestado(db,Tur)
         
@@ -463,7 +488,7 @@ def ausente(id):
     
     if request.method=='POST':
        
-        Tur=TurnoVal(id,"","","", "", "", "Ausente", "", "")
+        Tur=TurnoVal(id,"","","", "", "", "Ausente", "", "", "", "")
        
         NewTur=TurnoManager.actestado(db,Tur)
         
@@ -477,7 +502,7 @@ def cancelado(id):
     
     if request.method=='POST':
        
-        Tur=TurnoVal(id,"","","", "", "", "Cancelado", "", "")
+        Tur=TurnoVal(id,"","","", "", "", "Cancelado", "", "", "", "")
        
         NewTur=TurnoManager.actestado(db,Tur)
         

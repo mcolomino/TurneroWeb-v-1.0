@@ -36,7 +36,6 @@ class UsuarioManager():
             
             conditions = []
             params = []
-
             if usuario.id is not None and int(usuario.id) > 0:
                 conditions.append("idusu = %s")
                 params.append(usuario.id)
@@ -49,7 +48,27 @@ class UsuarioManager():
             cursor.execute(sql, params)
             datos = cursor.fetchall()
             
-            return datos if datos else None
+             # Lista para almacenar las instancias de UsuarioVal
+            lista_usu = []
+
+            # Itera sobre los resultados de la consulta SQL
+            for res in datos:
+                # Crea una instancia de UsuarioVal para cada registro
+                UsuV = UsuarioVal(
+                    idusu=res[0],
+                    nombre=res[1],
+                    mail=res[2],
+                    clave=res[3],
+                    telefono=res[4],
+                    profesional=res[5]
+                )
+                # Agrega la instancia a la lista de pacientes
+               
+                lista_usu.append(UsuV)
+
+            # Ahora `lista_usu` contiene instancias de UsuarioVal que representan los registros de la consulta SQL
+            
+            return lista_usu if lista_usu else None
 
         except Exception as ex:
             raise Exception(ex)
@@ -62,7 +81,26 @@ class UsuarioManager():
             cursor.execute(sql)
             datos = cursor.fetchall()
             
-            return datos if datos else None
+             # Lista para almacenar las instancias de UsuarioVal
+            lista_usu = []
+
+            # Itera sobre los resultados de la consulta SQL
+            for res in datos:
+                # Crea una instancia de UsuarioVal para cada registro
+                UsuV = UsuarioVal(
+                    idusu=res[0],
+                    nombre=res[1],
+                    mail=res[2],
+                    clave=res[3],
+                    telefono=res[4],
+                    profesional=res[5]
+                )
+                # Agrega la instancia a la lista de pacientes
+                lista_usu.append(UsuV)
+
+            # Ahora `lista_usu` contiene instancias de UsuarioVal que representan los registros de la consulta SQL
+            
+            return lista_usu if lista_usu else None
 
         except Exception as ex:
             raise Exception(ex)

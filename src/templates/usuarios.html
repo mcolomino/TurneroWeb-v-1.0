@@ -12,8 +12,8 @@
           <label for="ususel" class="me-3">Usuario:</label>
           <select name="ususel" class="form-control select2 select2-hidden-accessible" style="width: 30%;" tabindex="-1" aria-hidden="true" title="Seleccionar Usuario">
             <option value="0">Todos</option>
-            {% for itemx in Lista %}
-              <option value="{{ itemx[0] }}">{{ itemx[1] }}</option>
+            {% for UsuV in Lista %}
+              <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
             {% endfor %}
           </select>
         
@@ -79,28 +79,28 @@
       </tr>
     </thead>
     <tbody>
-      {% for itemx in Lista %}
+      {% for UsuV in Lista %}
         <tr>
-          <td>{{ itemx[1] }}</td>
-          <td>{{ itemx[4] }}</td>
-          <td>{{ itemx[2] }}</td>
+          <td>{{ UsuV.nombre }}</td>
+          <td>{{ UsuV.telefono }}</td>
+          <td>{{ UsuV.mail }}</td>
           <td>
-            {% if itemx[5] == 'SI' %}
-              {{ itemx[5] }}
+            {% if UsuV.profesional == 'SI' %}
+              {{ UsuV.profesional }}
             {% endif %}
           </td>
           <td>
-            <a href="EditarUsuario/{{ itemx[0] }}" class="btn" data-bs-toggle="modal" data-bs-target="#Editar_Usu{{ itemx[0] }}" type="button">
+            <a href="EditarUsuario/{{ UsuV.id }}" class="btn" data-bs-toggle="modal" data-bs-target="#modal_editar_Usu" type="button">
               <i class="fa fa-edit" aria-hidden="true"></i>
             </a>
-            <a class="btn" href="BorrarUsuario/{{ itemx[0] }}" onclick="return confirm('Seguro que desea eliminar el registro?')">
+            <a class="btn" href="BorrarUsuario/{{ UsuV.id }}" onclick="return confirm('Seguro que desea eliminar el registro?')">
               <i class="fa fa-trash-o" aria-hidden="true"></i>
             </a>
           </td>
         </tr>
 
         <!-- FORM MODAL PARA EDITAR USUARIO -->
-        <div class="modal fade" id="Editar_Usu{{ itemx[0] }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="modal_editar_Usu" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -110,27 +110,27 @@
                 </button>
               </div>
               <div class="modal-body">
-                <form id="Editar_Usu" action="EditarUsuario/{{ itemx[0] }}" method="POST">
-                  <input type="hidden" name="id" value="{{ itemx[0] }}">
+                <form id="Editar_Usu" action="EditarUsuario/{{ UsuV.id }}" method="POST">
+                  <input type="hidden" name="id" value="{{ UsuV.idu }}">
                   <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
                   <div class="form-group">
                     <label for="registro_nombre">Nombre</label>
-                    <input value="{{ itemx[1] }}" name="nombre" type="text" class="form-control" id="registro_nombre" placeholder="Ingrese Nombre" required>
+                    <input value="{{ UsuV.nombre }}" name="nombre" type="text" class="form-control" id="registro_nombre" placeholder="Ingrese Nombre" required>
                   </div>
                   <div class="form-group">
                     <label for="registro_mail">Mail</label>
-                    <input value="{{ itemx[2] }}" name="mail" type="email" class="form-control" id="registro_mail" placeholder="Ingrese Mail" required>
+                    <input value="{{ UsuV.mail }}" name="mail" type="email" class="form-control" id="registro_mail" placeholder="Ingrese Mail" required>
                   </div>
                   <div class="form-group">
                     <label for="registro_clave">Clave</label>
-                    <input value="{{ itemx[3] }}" name="clave" type="password" class="form-control" id="registro_clave" placeholder="Ingrese clave">
+                    <input value="{{ UsuV.clave }}" name="clave" type="password" class="form-control" id="registro_clave" placeholder="Ingrese clave">
                   </div>
                   <div class="form-group">
                     <label for="registro_telefono">Teléfono</label>
-                    <input value="{{ itemx[4] }}" name="telefono" type="text" class="form-control" id="registro_telefono" placeholder="Ingrese telefono">
+                    <input value="{{ UsuV.telefono }}" name="telefono" type="text" class="form-control" id="registro_telefono" placeholder="Ingrese telefono">
                   </div>
                   <div class="form-check form-switch">
-                    {% if itemx[5] == 'SI' %}
+                    {% if UsuV.profesional == 'SI' %}
                       <input class="form-check-input" type="checkbox" role="switch" value="SI" id="profesional" name="chkprof" checked>
                     {% else %}
                       <input class="form-check-input" type="checkbox" role="switch" value="SI" id="profesional" name="chkprof">

@@ -26,7 +26,7 @@ class TurnoManager():
             cursor = db.connection.cursor()
 
             sql = """SELECT idturno, fecha, horaturno, idprofesional, idpaciente, actividad, estado, 
-                    horallega, horaatiende, p.nombre AS nombre_pac, u.nombre AS nombre_prof 
+                    horallega, horaatiende, p.nombre AS nompac, u.nombre AS nomprof 
                     FROM turnos t 
                     INNER JOIN pacientes p ON t.idpaciente = p.idpac 
                     INNER JOIN usuario u ON t.idprofesional = u.idusu"""
@@ -54,7 +54,31 @@ class TurnoManager():
             cursor.execute(sql, params)
             datos = cursor.fetchall()
 
-            return datos
+             # Lista para almacenar las instancias de TurnoVal
+            lista_tur = []
+
+            # Itera sobre los resultados de la consulta SQL
+            for res in datos:
+                # Crea una instancia de TurnoVal para cada registro
+                TurV = TurnoVal(
+                    idturno=res[0],
+                    fecha=res[1],
+                    horaturno=res[2],
+                    idprofesional=res[3],
+                    idpaciente=res[4],
+                    actividad=res[5],
+                    estado=res[6],
+                    horallega=res[7],
+                    horaatiende=res[8],
+                    nompac=res[9],
+                    nomprof=res[10]              
+                )
+                # Agrega la instancia a la lista de turnos
+                lista_tur.append(TurV)
+
+            # Ahora `lista_tur` contiene instancias de TurnoVal que representan los registros de la consulta SQL
+            
+            return lista_tur if lista_tur else None
 
         except Exception as ex:
             raise Exception(ex)

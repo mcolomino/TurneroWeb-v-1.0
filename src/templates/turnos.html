@@ -17,11 +17,11 @@
             tabindex="-1" aria-hidden="true">
             <option value="0">Todos</option>
 
-            {% for itemx in ListaProf %}
-            {% if itemx[0] == idprof|int %}
-            <option value="{{ itemx[0] }}" selected>{{ itemx[1] }}</option>
+            {% for UsuV in ListaProf %}
+            {% if UsuV.id == idprof|int %}
+            <option value="{{ UsuV.id }}" selected>{{ UsuV.nombre }}</option>
             {% else %}
-            <option value="{{ itemx[0] }}">{{ itemx[1] }}</option>
+            <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
             {% endif %}
             {% endfor %}
 
@@ -93,8 +93,8 @@
               <div class="input-group">
                 <select name="reg_prof" class="form-control select2 select2-hidden-accessible" style="width: 100%;"
                   tabindex="-1" aria-hidden="true" title="Seleccionar Profesional">
-                  {% for itemx in ListaProf %}
-                  <option value="{{ itemx[0] }}">{{ itemx[1] }}</option>
+                  {% for UsuV in ListaProf %}
+                  <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
                   {% endfor %}
                 </select>
               </div>
@@ -105,7 +105,7 @@
               <label for="reg_pac">Paciente:</label>
               <div class="input-group">
                 <select name="reg_pac" class="form-control select2 select2-hidden-accessible" tabindex="-1"
-                  aria-hidden="true" title="Seleccionar Paciente" style="z-index: 9999;">
+                  aria-hidden="true" title="Seleccionar Paciente">
                   {% for PacV in ListaPac %}
                   <option value="{{ PacV.idpac }}">{{ PacV.nombre }} - {{ PacV.dni }} </option>
                   {% endfor %}
@@ -159,18 +159,18 @@
       </tr>
     </thead>
     <tbody>
-      {% for itemx in Lista %}
+      {% for TurV in Lista %}
       <tr>
-        <td>{{ itemx[1] }}</td>
-        <td>{{ itemx[2] }}</td>
-        <td>{{ itemx[9] }}</td>
-        <td>{{ itemx[5] }}</td>
+        <td>{{ TurV.fecha }}</td>
+        <td>{{ TurV.horaturno }}</td>
+        <td>{{ TurV.nompac }}</td>
+        <td>{{ TurV.actividad }}</td>
         <td>
-          <a href="EditarTurno/{{ itemx[0] }}" class="btn editar-btn" data-bs-toggle="modal"
-            data-bs-target="#Editar_Tur{{ itemx[0] }}" type="button">
+          <a href="EditarTurno/{{ TurV.idturno }}" class="btn editar-btn" data-bs-toggle="modal"
+            data-bs-target="#modal_edit_turno" type="button">
             <i class="fa fa-edit" aria-hidden="true"></i>
           </a>
-          <a class="btn" href="BorrarTurno/{{ itemx[0] }}"
+          <a class="btn" href="BorrarTurno/{{ TurV.idturno }}"
             onclick="return confirm('Seguro que desea eliminar el registro?')">
             <i class="fa fa-trash-o" aria-hidden="true"></i>
           </a>
@@ -180,7 +180,7 @@
 
 
       <!--- FORM MODAL PARA EDITAR TURNO --->
-      <div class="modal fade" id="Editar_Tur{{ itemx[0] }}" data-bs-backdrop="static" data-bs-keyboard="false"
+      <div class="modal fade" id="modal_edit_turno" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -191,14 +191,14 @@
               </button>
             </div>
             <div class="modal-body">
-              <form id="Editar_Tur" method="POST" action="EditarTurno/{{ itemx[0] }}">
-                <input type="hidden" name="id" value="{{ itemx[0] }}">
+              <form id="Editar_Tur" method="POST" action="EditarTurno/{{ TurV.idturno }}">
+                <input type="hidden" name="id" value="{{ TurV.idturno }}">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
 
                 <!---Campo:Fecha   ---->
                 <div class="form-group">
                   <label for="edit_fecha">Fecha:</label>
-                  <input type="date" value="{{ itemx[1] }}" class="form-control" id="edit_fecha" name="edit_fecha"
+                  <input type="date" value="{{ TurV.fecha }}" class="form-control" id="edit_fecha" name="edit_fecha"
                     placeholder="Ingrese Fecha..." required>
 
                 </div>
@@ -206,7 +206,7 @@
                 <!---Campo:Hora   --->
                 <div class="form-group">
                   <label for="edit_hora">Hora:</label>
-                  <input value="{{ itemx[2] }}" type="time" class="form-control" id="edit_hora" name="edit_hora"
+                  <input value="{{ TurV.horaturno }}" type="time" class="form-control" id="edit_hora" name="edit_hora"
                     placeholder="Ingrese Hora..." required>
                 </div>
 
@@ -218,11 +218,11 @@
                   <div class="input-group">
                     <select name="edit_prof" id="edit_prof" class="form-control select2 select2-hidden-accessible"
                       style="width: 100%;" tabindex="-1" aria-hidden="true" title="Seleccionar Profesional"> 
-                      {% for itemh in ListaProf %}
-                      {% if itemh[0] == itemx[3] %}
-                      <option value="{{ itemh[0] }}" selected>{{ itemh[1] }}</option>
+                      {% for UsuV in ListaProf %}
+                      {% if UsuV.id == TurV.idprofesional %}
+                      <option value="{{ UsuV.id }}" selected>{{ UsuV.nombre }}</option>
                       {% else %}
-                      <option value="{{ itemh[0] }}">{{ itemh[1] }}</option>
+                      <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
                       {% endif %}
                       {% endfor %}
 
@@ -237,7 +237,7 @@
                     <select name="edit_pac" class="form-control select2 select2-hidden-accessible" tabindex="-1"
                       aria-hidden="true" title="Seleccionar Paciente">
                       {% for PacV in ListaPac %}
-                      {% if PacV.idpac == itemx[4] %}
+                      {% if PacV.idpac == TurV.idpaciente %}
                       <option value="{{ PacV.idpac }}" selected>{{ PacV.nombre }} - {{ PacV.dni }} </option>
                       {% else %}
                       <option value="{{ PacV.idpac }}">{{ PacV.nombre }} - {{ PacV.dni }} </option>
@@ -261,7 +261,7 @@
                     <select name="edit_act" type="selectpicker" data-live-search="true" id="edit_act" 
                       class="form-control" title="Seleccione Actividad...">
                       {% for itemh in Lacti %}
-                      {% if itemh == itemx[5] %}
+                      {% if itemh == TurV.actividad %}
                       <option value="{{ itemh }}" selected>{{ itemh }} </option>
                       {% else %}
                       <option value="{{ itemh }}">{{ itemh }} </option>
@@ -278,7 +278,7 @@
                     <select name="edit_estado" type="selectpicker" data-live-search="true" id="edit_estado" 
                       class="form-control" title="Seleccione Estado...">
                       {% for itemh in Lesta %}
-                      {% if itemh == itemx[6] %}
+                      {% if itemh == TurV.estado %}
                       <option value="{{ itemh }}" selected>{{ itemh }} </option>
                       {% else %}
                       <option value="{{ itemh }}">{{ itemh }} </option>
@@ -292,13 +292,13 @@
                 <!---Campo:horallega   ---->
                 <div class="form-group">
                   <label for="edit_horallega">Hora de Llegada al turno</label>
-                  <input value="{{ itemx[7] }}" name="edit_horallega" type="time" class="form-control"
+                  <input value="{{ TurV.horallega }}" name="edit_horallega" type="time" class="form-control"
                     id="edit_horallega" placeholder="Ingrese Hora">
                 </div>
                 <!---Campo:horaatiende   ---->
                 <div class="form-group">
                   <label for="edit_horaatiende">Hora Atendida</label>
-                  <input value="{{ itemx[8] }}" name="edit_horaatiende" type="time" class="form-control"
+                  <input value="{{ TurV.horaatiende }}" name="edit_horaatiende" type="time" class="form-control"
                     id="edit_horaatiende" placeholder="Ingrese Hora">
                 </div>
 
@@ -339,14 +339,24 @@
   });
 </script>
 
-<!--
+<!-- Alta Turno -->
 <script>
   $('#modal_add_turno').on('shown.bs.modal', function () {
     $('.select2').select2({
+      dropdownParent: $('#modal_add_turno'),
       closeOnSelect: true
     });
   });
 </script>
--->
+
+<!-- Editar Turno -->
+<script>
+  $('#modal_edit_turno').on('shown.bs.modal', function () {
+    $('.select2').select2({
+      dropdownParent: $('#modal_edit_turno'),
+      closeOnSelect: true
+    });
+  });
+</script>
 
 {% endblock %}
