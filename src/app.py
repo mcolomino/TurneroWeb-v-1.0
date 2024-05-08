@@ -355,7 +355,7 @@ def AltaTurno():
 @login_required
 def EditarTurno(id):
     
-       
+    
     if request.method=='POST':
        
         #print(request.form.getlist('edit_prof'))

@@ -29,7 +29,7 @@
           <!---Campo:Fecha Desde -->
           <label for="fechad" class="me-3 mx-3">Fecha Desde:</label>
           <input type="date" class="form-control-sm" id="fechad" name="fechad" value="{{fechad}}">
-          <button class="btn btn-primary ms-4 mx-3" title="Buscar" type="submit">Buscar Turnos</button>
+          <button class="btn btn-primary rounded-3 ms-4 mx-3" title="Buscar" type="submit">Buscar Turnos</button>
         </div>
         <div class="input-group ms-3">
           <!---Campo:paciente -->
@@ -48,7 +48,7 @@
           <!---Campo:Fecha Hasta -->
           <label for="fechah" class="me-3 mx-3">Fecha Hasta:</label>
           <input type="date" class="form-control-sm" id="fechah" name="fechah" value="{{fechah}}">
-          <button type="button" class="btn btn-primary ms-4 mx-3" data-bs-toggle="modal" data-bs-target="#modal_add_turno"
+          <button type="button" class="btn btn-primary rounded-3 ms-4 mx-3" data-bs-toggle="modal" data-bs-target="#modal_add_turno"
             title="Crear Nuevo Registro"> Agregar Turno </button>
         </div>
       </div>
@@ -136,7 +136,7 @@
             <!---Campo:Horatiende vacío ---->
 
             <!---Botón:Registra--->
-            <button type="submit" class="btn btn-primary md-2">Registrar</button>
+            <button type="submit" class="btn btn-primary rounded-3 md-2">Registrar</button>
           </form>
         </div>
       </div>
@@ -167,7 +167,7 @@
         <td>{{ TurV.actividad }}</td>
         <td>
           <a href="EditarTurno/{{ TurV.idturno }}" class="btn editar-btn" data-bs-toggle="modal"
-            data-bs-target="#modal_edit_turno" type="button">
+            data-bs-target="#modal_edit_turno{{ TurV.idturno }}" type="button">
             <i class="fa fa-edit" aria-hidden="true"></i>
           </a>
           <a class="btn" href="BorrarTurno/{{ TurV.idturno }}"
@@ -180,7 +180,7 @@
 
 
       <!--- FORM MODAL PARA EDITAR TURNO --->
-      <div class="modal fade" id="modal_edit_turno" data-bs-backdrop="static" data-bs-keyboard="false"
+      <div class="modal fade" id="modal_edit_turno{{ TurV.idturno }}" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -291,25 +291,35 @@
 
                 <!---Campo:horallega   ---->
                 <div class="form-group">
-                  <label for="edit_horallega">Hora de Llegada al turno</label>
+                  <label for="edit_horallega">Hora de Llegada</label>
                   <input value="{{ TurV.horallega }}" name="edit_horallega" type="time" class="form-control"
                     id="edit_horallega" placeholder="Ingrese Hora">
                 </div>
                 <!---Campo:horaatiende   ---->
                 <div class="form-group">
-                  <label for="edit_horaatiende">Hora Atendida</label>
+                  <label for="edit_horaatiende">Hora de Atención</label>
                   <input value="{{ TurV.horaatiende }}" name="edit_horaatiende" type="time" class="form-control"
                     id="edit_horaatiende" placeholder="Ingrese Hora">
                 </div>
 
                 <!---Botón:Registra--->
-                <button type="submit" class="btn btn-primary md-2">Registrar</button>
+                <button type="submit" class="btn btn-primary rounded-3 md-2">Registrar</button>
               </form>
             </div>
 
           </div>
         </div>
       </div>
+
+      <!-- Editar Turno -->
+      <script>
+        $('#modal_edit_turno{{ TurV.idturno }}').on('shown.bs.modal', function () {
+          $('.select2').select2({
+            dropdownParent: $('#modal_edit_turno{{ TurV.idturno }}'),
+            closeOnSelect: true
+          });
+        });
+      </script>
 
       {% endfor %}
 
@@ -349,14 +359,6 @@
   });
 </script>
 
-<!-- Editar Turno -->
-<script>
-  $('#modal_edit_turno').on('shown.bs.modal', function () {
-    $('.select2').select2({
-      dropdownParent: $('#modal_edit_turno'),
-      closeOnSelect: true
-    });
-  });
-</script>
+
 
 {% endblock %}
