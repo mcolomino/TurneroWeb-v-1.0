@@ -3,8 +3,9 @@ from flask_mysqldb import MySQL
 from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_wtf.csrf import CSRFProtect
 from flask_paginate import Pagination, get_page_args
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 from config import config
+
 
 #Models
 from models.UsuarioManager import UsuarioManager
@@ -290,8 +291,11 @@ def turnos():
     idprof=0
     idpac=0
     fechad = datetime.now().strftime('%Y-%m-%d')
-    fechah = datetime.now().strftime('%Y-%m-%d')
-    
+    # Sumar un mes a la fecha actual para mostrar turnos desde hoy hasta 1 mes adelante
+    fechah = datetime.now() + timedelta(days=30)
+    # Obtener la representación en formato YYYY-MM-DD de la fecha hasta
+    fechah = fechah.strftime('%Y-%m-%d')
+
     if request.method=='POST':
         idprof = request.form['professel']
         idpac = request.form['pacsel']
@@ -300,7 +304,7 @@ def turnos():
         #crear un Turno filtro con prof, pac, fecdes, fechas
         TurFil=TurnoFil(request.form['fechad'],request.form['fechah'],request.form['professel'],request.form['pacsel'])
     else:
-        TurFil=TurnoFil(None,None,None,None)
+        TurFil=TurnoFil(fechad,fechah,None,None)
 
     #print (TurFil.idprofesional)
 

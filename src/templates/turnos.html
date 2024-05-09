@@ -111,10 +111,10 @@
                   {% endfor %}
                 </select>
 
-                <div class="input-group-append">
+                <!--<div class="input-group-append">
                   <button type="button" class="btn btn-primary" data-toggle="modal"
                     data-target="#agregarPacienteModal">+</button>
-                </div>
+                </div>-->
               </div>
 
             </div>
@@ -161,7 +161,7 @@
     <tbody>
       {% for TurV in Lista %}
       <tr>
-        <td>{{ TurV.fecha }}</td>
+        <td>{{ TurV.fecha.strftime('%d/%m/%Y') }}</td>
         <td>{{ TurV.horaturno }}</td>
         <td>{{ TurV.nompac }}</td>
         <td>{{ TurV.actividad }}</td>
@@ -245,10 +245,10 @@
                       {% endfor %}
                     </select>
 
-                    <div class="input-group-append">
+                    <!--<div class="input-group-append">
                       <button type="button" class="btn btn-primary" data-toggle="modal"
                         data-target="#agregarPacienteModal">+</button>
-                    </div>
+                    </div>-->
                   </div>
 
                 </div>
