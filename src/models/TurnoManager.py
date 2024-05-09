@@ -34,6 +34,9 @@ class TurnoManager():
             conditions = []
             params = []
 
+            # No incluir los turnos cancelados
+            conditions.append("estado <> 'Cancelado'")
+    
             if filtro.fechad is not None:
                 conditions.append("t.fecha BETWEEN %s AND %s")
                 params.extend([filtro.fechad, filtro.fechah])

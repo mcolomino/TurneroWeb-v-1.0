@@ -361,7 +361,6 @@ def EditarTurno(id):
     
     
     if request.method=='POST':
-       
         #print(request.form.getlist('edit_prof'))
         #print(request.form.getlist('edit_pac'))
         Tur=TurnoVal(id,request.form['edit_fecha'],request.form['edit_hora'],request.form.getlist('edit_prof'), request.form.getlist('edit_pac'), request.form['edit_act'], request.form['edit_estado'], request.form['edit_horallega'], request.form['edit_horaatiende'], "", "")
