@@ -534,5 +534,8 @@ if __name__=='__main__':
     app.config.from_object(config['development'])
     csrf.init_app(app)
     app.register_error_handler(404,status_404)
-    app.run()
+    port = 80
+    host = "192.168.1.2"
+    app.run(host=host, port=port)
+    #app.run()
     

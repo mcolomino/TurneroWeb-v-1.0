@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-04-2024 a las 22:46:25
+-- Tiempo de generación: 10-05-2024 a las 16:14:58
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -61,9 +61,10 @@ CREATE TABLE `pacientes` (
 INSERT INTO `pacientes` (`idpac`, `nombre`, `dni`, `telefono`, `mail`) VALUES
 (1, 'Alicia', '12345678', '1111', 'alicia@gmail.com'),
 (2, 'Belen', '23456789', '2221', 'belen@gmail.com'),
-(3, 'Cecilia', '34557635', '', ''),
+(3, 'Cecilia', '34557635', '1111', 's@w'),
 (4, 'Daniela', '111', '11', '1@gmail.com'),
-(5, 'Eliana', '8888', '035', 's@w');
+(5, 'Eliana', '8888', '035', 's@w'),
+(6, 'Flavia', '34557635', '2221j', 's@w');
 
 -- --------------------------------------------------------
 
@@ -88,17 +89,12 @@ CREATE TABLE `turnos` (
 --
 
 INSERT INTO `turnos` (`idturno`, `fecha`, `horaturno`, `idprofesional`, `idpaciente`, `actividad`, `estado`, `horallega`, `horaatiende`) VALUES
-(1, '2024-04-20', '15:00', 1, 4, 'Consulta', 'Atendido', '12:30', '16:30'),
-(2, '2024-04-19', '11:30', 1, 2, 'Control', 'En Espera', '16:29', ''),
-(3, '2024-04-23', '11:30', 1, 4, 'Control', 'En Agenda', '', ''),
-(4, '2024-04-20', '15:00', 1, 1, 'Consulta', 'Ausente', '', ''),
-(5, '2024-04-22', '11:30', 1, 5, 'Control', 'Cancelado', '', ''),
-(6, '2024-04-22', '14:45', 1, 1, 'Control', 'En Agenda', '', ''),
-(7, '2024-04-30', '12:34', 1, 1, 'Consulta', 'En Espera', '', ''),
-(8, '2024-04-23', '11:30', 1, 4, 'Control', 'En Agenda', '', ''),
-(9, '2024-04-19', '15:00', 25, 3, 'Consulta', 'En Agenda', '', ''),
-(10, '2024-04-19', '18:00', 25, 5, 'Control', 'En Agenda', '', ''),
-(11, '2024-04-25', '08:00', 25, 3, 'Control', 'En Agenda', '', '');
+(7, '2024-05-08', '08:00', 1, 3, 'Control', 'Atendido', '07:56', '07:56'),
+(12, '2024-05-08', '10:00', 1, 5, 'Control', 'Ausente', '', ''),
+(13, '2024-05-08', '09:00', 1, 1, 'Control', 'Ausente', '', ''),
+(14, '2024-05-08', '13:00', 1, 5, 'Consulta', 'Cancelado', '', ''),
+(15, '2024-05-08', '12:00', 1, 4, 'Consulta', 'Ausente', '', ''),
+(16, '2024-05-08', '11:00', 1, 4, 'Consulta', 'Ausente', '', '');
 
 -- --------------------------------------------------------
 
@@ -121,8 +117,7 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`idusu`, `nombre`, `mail`, `clave`, `telefono`, `profesional`) VALUES
 (1, 'Maximiliano Illanes', 'Maxi@gmail.com', '', '353-4111222', 'SI'),
-(2, 'Secre Vero', 'Vero@gmail.com', 'a', '353-4222111', 'NO'),
-(25, 'Mario Colomino', 'marioacolomino@gmail.com', '11', '111111', 'SI');
+(2, 'Secre Vero', 'Vero@gmail.com', '123', '353-4222111', 'NO');
 
 --
 -- Índices para tablas volcadas
@@ -166,19 +161,19 @@ ALTER TABLE `consultorio`
 -- AUTO_INCREMENT de la tabla `pacientes`
 --
 ALTER TABLE `pacientes`
-  MODIFY `idpac` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idpac` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `turnos`
 --
 ALTER TABLE `turnos`
-  MODIFY `idturno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idturno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idusu` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `idusu` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
