@@ -49,6 +49,9 @@
     .btn-atendido { color: blue; font-weight: bold; }
     .btn-ausente { color: orange; font-weight: bold; }
     .btn-cancelado { color: gray; font-weight: bold; }
+    .llega-bien { color: black; }
+    .llega-tarde { color: red; }
+    
   </style>
   <table class="table table-hover rounded-1">
     <thead>
@@ -67,12 +70,17 @@
         <tr>
           <td>{{ TurV.nompac }}</td>
           <td>{{ TurV.actividad }}</td>
-          <td>{{ TurV.horaturno }}</td>
-          <td>{{ TurV.horallega }}</td>
-          <td>{{ TurV.horaatiende }}</td>
+          <td>{{ TurV.horaturno}}</td>
           <td>
-
-
+            {% if TurV.horallega > TurV.horaturno %}
+              <span class="llega-tarde">{{ TurV.horallega }}</span>
+            {% else %}
+              <span class="llega-bien">{{ TurV.horallega }}</span>
+            {% endif %}
+          </td>
+          <td>{{ TurV.horaatiende }}</td>
+          
+          <td>
             <div class="dropdown">
               <button class="btn dropdown-toggle {% if TurV.estado == 'En Agenda' %} btn-en-agenda {% elif TurV.estado == 'En Espera' %} btn-en-espera {% elif TurV.estado == 'Atendido' %} btn-atendido {% elif TurV.estado == 'Ausente' %} btn-ausente {% elif TurV.estado == 'Cancelado' %} btn-cancelado {% endif %}" value="{{ TurV.estado }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ TurV.estado }}

@@ -1,0 +1,1 @@
+c:/TURNERO_WEB/env/Scripts/python.exe c:/TURNERO_WEB/src/app.py

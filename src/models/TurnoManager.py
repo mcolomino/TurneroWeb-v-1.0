@@ -74,8 +74,10 @@ class TurnoManager():
                     horallega=res[7],
                     horaatiende=res[8],
                     nompac=res[9],
-                    nomprof=res[10]              
+                    nomprof=res[10]   
                 )
+                
+
                 # Agrega la instancia a la lista de turnos
                 lista_tur.append(TurV)
 

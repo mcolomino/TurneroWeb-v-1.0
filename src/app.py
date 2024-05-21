@@ -426,6 +426,7 @@ def sala():
 
 
     TodTur=TurnoManager.BuscarTodos(db,TurFil)
+    
     if TodTur is not None:
         total = len(TodTur)
         paginated_data=TodTur[offset: offset + per_page]
@@ -436,7 +437,7 @@ def sala():
 
     pagination=Pagination(page=page, per_page=per_page,total=total, css_framework='bootstrap5')
     
-    return render_template('sala.html',Lista = paginated_data, ListaProf = TodUsuProf, idprof = idprof, fechad = fechad, Pagination=pagination)
+    return render_template('sala.html',Lista = paginated_data, ListaProf = TodUsuProf, idprof = idprof, fechad = fechad, Pagination=pagination, datetime=datetime)
 
 #actualiza estado de turnos
 
@@ -534,7 +535,7 @@ if __name__=='__main__':
     app.config.from_object(config['development'])
     csrf.init_app(app)
     app.register_error_handler(404,status_404)
-    port = 80
+    port = 5000
     host = "192.168.1.2"
     app.run(host=host, port=port)
     #app.run()

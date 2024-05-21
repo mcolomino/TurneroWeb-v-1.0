@@ -12,8 +12,8 @@
       <div class="col my-3">
         <div class="input-group">
           <!---Campo:profesional   ---->
-          <label for="professel" class="me-3 text-start" style="width: 90px;">Profesional:</label>
-          <select name="professel" class="form-control select2 select2-hidden-accessible mx-3 me-3" style="width: 30%;"
+          <label for="professel" class="me-3 text-start" style="width: 75px;">Profesional:</label>
+          <select name="professel" class="form-control select2 select2-hidden-accessible mx-2 me-3" style="width: 25%;"
             tabindex="-1" aria-hidden="true">
             <option value="0">Todos</option>
 
@@ -27,14 +27,14 @@
 
           </select>
           <!---Campo:Fecha Desde -->
-          <label for="fechad" class="me-3 mx-3" style="width: 90px;">Fecha Desde:</label>
+          <label for="fechad" class="me-2 mx-2" style="width: 90px;">Fecha Desde:</label>
           <input type="date" class="form-control-sm" id="fechad" name="fechad" value="{{fechad}}">
-          <button class="btn btn-primary rounded-3 ms-4 mx-3" title="Buscar" type="submit">Buscar Turnos</button>
+          <button class="btn btn-primary rounded-3 ms-2 mx-2" title="Buscar" type="submit">Buscar</button>
         </div>
         <div class="input-group">
           <!---Campo:paciente -->
-          <label for="pacsel" class="me-3 text-start" style="width: 90px;">Paciente:</label>
-          <select name="pacsel" class="form-control select2 select2-hidden-accessible mx-3 me-3" style="width: 30%;" tabindex="-1"
+          <label for="pacsel" class="me-3 text-start" style="width: 75px;">Paciente:</label>
+          <select name="pacsel" class="form-control select2 select2-hidden-accessible mx-2 me-3" style="width: 25%;" tabindex="-1"
             aria-hidden="true" title="Seleccionar Paciente">
             <option value="0">Todos</option>
             {% for PacV in ListaPac %}
@@ -46,10 +46,10 @@
             {% endfor %}
           </select>
           <!---Campo:Fecha Hasta -->
-          <label for="fechah" class="me-3 mx-3" style="width: 90px;">Fecha Hasta:</label>
+          <label for="fechah" class="me-2 mx-2" style="width: 90px;">Fecha Hasta:</label>
           <input type="date" class="form-control-sm" id="fechah" name="fechah" value="{{fechah}}">
-          <button type="button" class="btn btn-primary rounded-3 ms-4 mx-3" data-bs-toggle="modal" data-bs-target="#modal_add_turno"
-            title="Crear Nuevo Registro"> Agregar Turno </button>
+          <button type="button" class="btn btn-primary rounded-3 ms-2 mx-2" data-bs-toggle="modal" data-bs-target="#modal_add_turno"
+            title="Crear Nuevo Registro"> Agregar</button>
         </div>
       </div>
 
@@ -318,6 +318,7 @@
             dropdownParent: $('#modal_edit_turno{{ TurV.idturno }}'),
             closeOnSelect: true
           });
+      
         });
       </script>
 
@@ -346,6 +347,7 @@
     $('.select2').select2({
       closeOnSelect: true
     });
+ 
   });
 </script>
 
