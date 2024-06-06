@@ -1,7 +1,7 @@
 {% macro sidebar() %}
     <div class="container-fluid">
         <div class="row flex-nowrap">
-            <div class="col-auto">
+            <div class="col-auto start-0">
                  <!--<div class="bg-secondary rounded-3 ml-1 mt-1" style="height: 70pc "> -->
                     
 
@@ -24,6 +24,9 @@
                             </a>
                             <a href="{{ url_for('sala') }}" class="list-group-item list-group-item-action py-2 ripple">
                             <i class="fa fa-newspaper-o fa-fw me-3"></i><span>Sala de Espera</span>
+                            </a>
+                            <a href="{{ url_for('asistencias') }}" class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fa fa-check-square-o me-3"></i><span>Asistencias</span>
                             </a>
                             <a href="{{ url_for('logout') }}" class="list-group-item list-group-item-action py-2 ripple"
                             ><i class="fa fa-sign-out fa-fw me-3"></i><span>Cerrar Sesión</span>

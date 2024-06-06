@@ -15,16 +15,20 @@
           <label for="professel" class="me-3 text-start" style="width: 75px;">Profesional:</label>
           <select name="professel" class="form-control select2 select2-hidden-accessible mx-2 me-3" style="width: 25%;"
             tabindex="-1" aria-hidden="true">
-            <option value="0">Todos</option>
-
-            {% for UsuV in ListaProf %}
-            {% if UsuV.id == idprof|int %}
-            <option value="{{ UsuV.id }}" selected>{{ UsuV.nombre }}</option>
+            
+            {% if user.profesional == 'SI' %}
+              <option value="{{ user.id }}" selected>{{ user.nombre }}</option>
             {% else %}
-            <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
-            {% endif %}
-            {% endfor %}
+              <option value="0">Todos</option>
 
+              {% for UsuV in ListaProf %}
+                {% if UsuV.id == idprof|int %}
+                  <option value="{{ UsuV.id }}" selected>{{ UsuV.nombre }}</option>
+                {% else %}
+                  <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
+                {% endif %}
+              {% endfor %}  
+            {% endif %}
           </select>
           <!---Campo:Fecha Desde -->
           <label for="fechad" class="me-2 mx-2" style="width: 90px;">Fecha Desde:</label>
@@ -93,9 +97,13 @@
               <div class="input-group">
                 <select name="reg_prof" class="form-control select2 select2-hidden-accessible" style="width: 100%;"
                   tabindex="-1" aria-hidden="true" title="Seleccionar Profesional">
-                  {% for UsuV in ListaProf %}
-                  <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
-                  {% endfor %}
+                  {% if user.profesional == 'SI' %}
+                    <option value="{{ user.id }}" selected>{{ user.nombre }}</option>
+                  {% else %}
+                    {% for UsuV in ListaProf %}
+                    <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
+                    {% endfor %}
+                  {% endif %}
                 </select>
               </div>
             </div>
@@ -105,7 +113,8 @@
               <label for="reg_pac">Paciente:</label>
               <div class="input-group">
                 <select name="reg_pac" class="form-control select2 select2-hidden-accessible" tabindex="-1"
-                  aria-hidden="true" title="Seleccionar Paciente">
+                  aria-hidden="true" title="Seleccionar Paciente" required>
+                  <option value=""></option>
                   {% for PacV in ListaPac %}
                   <option value="{{ PacV.idpac }}">{{ PacV.nombre }} - {{ PacV.dni }} </option>
                   {% endfor %}
@@ -209,23 +218,23 @@
                   <input value="{{ TurV.horaturno }}" type="time" class="form-control" id="edit_hora" name="edit_hora"
                     placeholder="Ingrese Hora..." required>
                 </div>
-
-
-
                 <!---Campo:profesional   ---->
                 <div class="form-group">
                   <label for="edit_prof">Profesional</label>
                   <div class="input-group">
                     <select name="edit_prof" id="edit_prof" class="form-control select2 select2-hidden-accessible"
                       style="width: 100%;" tabindex="-1" aria-hidden="true" title="Seleccionar Profesional"> 
-                      {% for UsuV in ListaProf %}
-                      {% if UsuV.id == TurV.idprofesional %}
-                      <option value="{{ UsuV.id }}" selected>{{ UsuV.nombre }}</option>
+                      {% if user.profesional == 'SI' %}
+                        <option value="{{ user.id }}" selected>{{ user.nombre }}</option>
                       {% else %}
-                      <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
+                        {% for UsuV in ListaProf %}
+                          {% if UsuV.id == TurV.idprofesional %}
+                            <option value="{{ UsuV.id }}" selected>{{ UsuV.nombre }}</option>
+                          {% else %}
+                            <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
+                          {% endif %}
+                        {% endfor %}
                       {% endif %}
-                      {% endfor %}
-
                     </select>
                   </div>
                 </div>

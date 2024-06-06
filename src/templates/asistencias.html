@@ -1,0 +1,121 @@
+<!-- asistencias.html -->
+{% extends './basegral.html' %}
+
+{% block page_content %}
+
+<div class="container rounded-4" gap-3 style="background-color: rgb(189, 189, 181, 0.432);">
+  <!-- Buscar por usuario -->
+  <div class="row mt-3 border border-3 rounded-4" style="background-color: rgb(248, 248, 233); ">
+    <form id="filtro" action="asistencias" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
+
+      <div class="col my-3">
+        <div class="input-group">
+          <!---Campo:profesional   ---->
+          <label for="professel" class="me-3 text-start" style="width: 75px;">Profesional:</label>
+          <select name="professel" class="form-control select2 select2-hidden-accessible mx-2 me-3" style="width: 25%;"
+            tabindex="-1" aria-hidden="true">
+            
+            {% if user.profesional == 'SI' %}
+              <option value="{{ user.id }}" selected>{{ user.nombre }}</option>
+            {% else %}
+              <option value="0">Todos</option>
+
+              {% for UsuV in ListaProf %}
+                {% if UsuV.id == idprof|int %}
+                  <option value="{{ UsuV.id }}" selected>{{ UsuV.nombre }}</option>
+                {% else %}
+                  <option value="{{ UsuV.id }}">{{ UsuV.nombre }}</option>
+                {% endif %}
+              {% endfor %}  
+            {% endif %}
+          </select>
+          <!---Campo:Fecha Desde -->
+          <label for="fechad" class="me-2 mx-2" style="width: 90px;">Fecha Desde:</label>
+          <input type="date" class="form-control-sm" id="fechad" name="fechad" value="{{fechad}}">
+          <button class="btn btn-primary rounded-3 ms-2 mx-2" title="Buscar" type="submit">Buscar</button>
+        </div>
+        <div class="input-group">
+          <!---Campo:paciente -->
+          <label for="pacsel" class="me-3 text-start" style="width: 75px;">Paciente:</label>
+          <select name="pacsel" class="form-control select2 select2-hidden-accessible mx-2 me-3" style="width: 25%;" tabindex="-1"
+            aria-hidden="true" title="Seleccionar Paciente">
+            <option value="0"></option>
+            
+            {% for PacV in ListaPac %}
+            {% if PacV.idpac == idpac|int %}
+            <option value="{{ PacV.idpac }}" selected>{{ PacV.nombre }} - {{ PacV.dni }} </option>
+            {% else %}
+            <option value="{{ PacV.idpac }}">{{ PacV.nombre }} - {{ PacV.dni }} </option>
+            {% endif %}
+            {% endfor %}
+          </select>
+          <!---Campo:Fecha Hasta -->
+          <label for="fechah" class="me-2 mx-2" style="width: 90px;">Fecha Hasta:</label>
+          <input type="date" class="form-control-sm" id="fechah" name="fechah" value="{{fechah}}">
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+<!-- Cabecera lista de asistencias -->
+<div class="row mt-2 border border-3 rounded-4" style="background-color: rgb(248, 248, 233);">
+  <table class="table table-hover rounded-4">
+    <thead>
+      <tr>
+        <th scope="col">Fecha</th>
+        {% if idpac|int == 0 %}
+        <th scope="col">Paciente</th>
+        {% endif %}
+        <th scope="col">Actividad</th>
+        <th scope="col">Hora Turno</th>
+        <th scope="col">Hora Llegada</th>
+        <th scope="col">Hora Atención</th>
+        <th scope="col">Estado</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for TurV in Lista %}
+      <tr>
+        <td>{{ TurV.fecha.strftime('%d/%m/%Y') }}</td>
+        {% if idpac|int == 0 %}
+        <td>{{ TurV.nompac }}</td>
+        {% endif %}
+        <td>{{ TurV.actividad }}</td>
+        <td>{{ TurV.horaturno }}</td>
+        <td>{{ TurV.horallega }}</td>
+        <td>{{ TurV.horaatiende }}</td>
+        <td>{{ TurV.estado }}</td>
+        
+      </tr>
+
+      {% endfor %}
+
+    </tbody>
+
+  </table>
+</div>
+<!-- Script para obtener y mostrar la fecha actual -->
+<script>
+  // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
+  var fechaActual = new Date().toISOString().split('T')[0];
+  // Establecer la fecha actual como valor del campo de fecha
+  document.getElementById('reg_fecha').value = fechaActual;
+  //document.getElementById('fechad').value = fechaActual;
+  //document.getElementById('fechah').value = fechaActual;
+</script>
+
+<!-- Script para abrir comonente select2 con busqueda -->
+<script>
+  $(document).ready(function () {
+    $('.select2').select2({
+      closeOnSelect: true
+    });
+ 
+  });
+</script>
+{% endblock %}

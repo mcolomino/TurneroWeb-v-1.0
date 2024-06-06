@@ -18,7 +18,11 @@
           </select>
 
           <button class="btn btn-primary rounded-3 ms-2 me-3" title="Buscar Usuario" type="submit" id="buscarBtn">Buscar</button>
-          <button type="button" class="btn btn-primary rounded-3 ms-auto" data-bs-toggle="modal" data-bs-target="#modal_add" title="Crear Nuevo Registro">Agregar Usuario</button>
+          {% if user.profesional == 'SI' %}
+            <button type="button" class="btn btn-primary rounded-3 ms-auto" data-bs-toggle="modal" data-bs-target="#modal_add" title="Crear Nuevo Registro" disabled>Agregar Usuario</button>
+          {% else %}
+            <button type="button" class="btn btn-primary rounded-3 ms-auto" data-bs-toggle="modal" data-bs-target="#modal_add" title="Crear Nuevo Registro">Agregar Usuario</button>
+          {% endif %}
         </div>
       </div>
     </form>

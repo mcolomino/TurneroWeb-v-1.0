@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysqldb import MySQL
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
 from flask_paginate import Pagination, get_page_args
 from datetime import datetime, date, time, timedelta
@@ -119,12 +119,20 @@ def usuarios():
     pagination = None
     page, per_page, offset=get_page_args(page_parameter='page', per_page_parameter='per_page')
     
-    idusu = 0
+
+
+    user=current_user
+    if user.profesional == "SI":
+        idusu=user.id
+    else:
+        idusu = 0    
+                 
+
     if request.method=='POST':
         idusu = request.form['ususel']
         user=UsuarioVal(idusu,"","","",1,"")
     else:
-        user=UsuarioVal(0,"","","",1,"")
+        user=UsuarioVal(idusu,"","","",1,"")
 
     TodUsu=UsuarioManager.BuscarTodos(db,user)
     
@@ -137,7 +145,7 @@ def usuarios():
 
     pagination=Pagination(page=page, per_page=per_page,total=total, css_framework='bootstrap5')
 
-    return render_template('usuarios.html',Lista = paginated_data, Pagination=pagination)
+    return render_template('usuarios.html',Lista = paginated_data, Pagination=pagination, user=current_user)
     
     
 @app.route('/AltaUsuario', methods=['POST'])
@@ -288,7 +296,12 @@ def turnos():
     pagination = None
     page, per_page, offset=get_page_args(page_parameter='page', per_page_parameter='per_page')
     
-    idprof=0
+    user=current_user
+    if user.profesional == "SI":
+        idprof=user.id
+    else:
+        idprof = 0
+
     idpac=0
     fechad = datetime.now().strftime('%Y-%m-%d')
     # Sumar un mes a la fecha actual para mostrar turnos desde hoy hasta 1 mes adelante
@@ -304,7 +317,7 @@ def turnos():
         #crear un Turno filtro con prof, pac, fecdes, fechas
         TurFil=TurnoFil(request.form['fechad'],request.form['fechah'],request.form['professel'],request.form['pacsel'])
     else:
-        TurFil=TurnoFil(fechad,fechah,None,None)
+        TurFil=TurnoFil(fechad,fechah,idprof,None)
 
     #print (TurFil.idprofesional)
 
@@ -334,7 +347,7 @@ def turnos():
     Actividades = ["Consulta", "Control"]
 
     #print (TodPac)
-    return render_template('turnos.html',Lista = paginated_data, Lacti = Actividades, Lesta = Estados, ListaProf = TodUsuProf, ListaPac = TodPac, idprof = idprof, idpac = idpac, fechad = fechad, fechah = fechah, Pagination=pagination)
+    return render_template('turnos.html',Lista = paginated_data, Lacti = Actividades, Lesta = Estados, ListaProf = TodUsuProf, ListaPac = TodPac, idprof = idprof, idpac = idpac, fechad = fechad, fechah = fechah, Pagination=pagination, user=current_user)
     
 
 
@@ -405,10 +418,15 @@ def sala():
     user=UsuarioVal(0,"","","",1,"")
     TodUsuProf=UsuarioManager.BuscarTodosProf(db,user)
     
-    idprof=0
-    for elemento in TodUsuProf:
-        idprof = elemento.id
-        break
+    idprof = 0
+    user=current_user
+    if user.profesional == "SI":
+        idprof=user.id
+    else:  
+        idprof=0
+        for elemento in TodUsuProf:
+            idprof = elemento.id
+            break
 
     #idpac=0
     fechad = datetime.now().strftime('%Y-%m-%d')
@@ -421,7 +439,7 @@ def sala():
         #crear un Turno filtro con prof, pac, fecdes, fechas
         TurFil=TurnoFil(fechad,fechad,request.form['professel'],0)
     else:
-        TurFil=TurnoFil(fechad,fechah,idprof,None)
+        TurFil=TurnoFil(fechad,fechah,idprof,idprof)
         #TurFil=TurnoFil(None,None,idprof,None)
 
 
@@ -437,7 +455,7 @@ def sala():
 
     pagination=Pagination(page=page, per_page=per_page,total=total, css_framework='bootstrap5')
     
-    return render_template('sala.html',Lista = paginated_data, ListaProf = TodUsuProf, idprof = idprof, fechad = fechad, Pagination=pagination, datetime=datetime)
+    return render_template('sala.html',Lista = paginated_data, ListaProf = TodUsuProf, idprof = idprof, fechad = fechad, Pagination=pagination, datetime=datetime, user=current_user)
 
 #actualiza estado de turnos
 
@@ -515,10 +533,63 @@ def cancelado(id):
         return 'Please go back and enter your name...', 400  # 400 Bad Request
 
 
-
-
 ### FIN FUNCIONES PAGINA SALA.HTML
 ######################################
+
+
+
+#########################################
+### INICIO FUNCIONES INFORME ASISTENCIAS.HTML
+
+
+@app.route('/asistencias', methods=['GET', 'POST'])
+@login_required
+def asistencias():
+    
+    
+    user=current_user
+    if user.profesional == "SI":
+        idprof=user.id
+    else:
+        idprof = 0
+
+    idpac=0
+    # Restar un mes a la fecha actual para mostrar turnos desde hoy hasta 1 mes atras
+    fechad = datetime.now() - timedelta(days=30)
+    # Obtener la representación en formato YYYY-MM-DD de la fecha hasta
+    fechad = fechad.strftime('%Y-%m-%d')
+    fechah = datetime.now().strftime('%Y-%m-%d')
+
+    if request.method=='POST':
+        idprof = request.form['professel']
+        idpac = request.form['pacsel']
+        fechad = request.form['fechad']
+        fechah = request.form['fechah']
+        #crear un Turno filtro con prof, pac, fecdes, fechas
+        TurFil=TurnoFil(request.form['fechad'],request.form['fechah'],request.form['professel'],request.form['pacsel'])
+    else:
+        TurFil=TurnoFil(fechad,fechah,idprof ,0)
+  
+    TodTur=TurnoManager.BuscarAsistencias(db,TurFil)
+    if TodTur is None:
+        TodTur = []
+    
+       #buscar los usuarios profesionales y pasarlos para llenar los combos 
+    user=UsuarioVal(0,"","","",1,"")
+    TodUsuProf=UsuarioManager.BuscarTodosProf(db,user)
+    
+    #buscar todos los pacientes y pasarlos para llenar los combos 
+    Pac=PacienteVal(0,"","","","")
+    TodPac=PacienteManager.BuscarTodos(db,Pac)
+
+    #print (TodPac)
+    return render_template('asistencias.html',Lista = TodTur, ListaProf = TodUsuProf, ListaPac = TodPac, idprof = idprof, idpac = idpac, fechad = fechad, fechah = fechah, user=current_user)
+
+
+### FIN FUNCIONES INFORMES.HTML
+######################################
+
+
 
 
 
